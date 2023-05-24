@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nexus Blog</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header th:include="fragments/header::header"/>
+<div th:include="fragments/posts::posts"/>
+
+<footer th:include="fragments/footer :: footer"/>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts Form</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/post_form.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/script/script.js"></script>
+</head>
+<body>
+<header th:include="fragments/header::header"/>
+
+<div class="container">
+    <div class="post-container">
+        <form th:action="@{'/blog/update'}" method="post" th:object="${post}">
+
+            <div class="post-form">
+
+                <div class="post-title">
+                    <input id="title" name="title" type="text"
+                           th:value="${post.title}" placeholder="Enter title here..."/>
+                    <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"/>
+                </div>
+
+                <div class="post-content">
+                    <textarea id="content" name="content" type="text"
+                              th:value="${post.content}" placeholder="Type here..."></textarea>
+                </div>
+
+                <div class="post-footer">
+                    <input type="hidden" name="id" th:value="${post.id}"/>
+                    <input type="hidden" name="created"
+                           th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm:ss')}"/>
+
+                    <button type="submit">Save</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<footer th:include="fragments/footer :: footer"/>
+
+</body>
+</html>
