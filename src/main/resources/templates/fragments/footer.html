@@ -5,7 +5,7 @@
 <body>
 </body>
 <footer th:fragment="footer">
-    <nav th:include="fragments/menu::menu"/>
+    <th:block th:insert="~{fragments/menu::menu}"/>
 
     <div class="copyright">
         <h5>&copy;Soloveyko</h5>

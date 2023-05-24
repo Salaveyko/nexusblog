@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<header th:include="fragments/header::header"/>
+<th:block th:insert="~{fragments/header::header}"/>
 
 <div class="container">
     <p class="error" th:text="${error}"/>
 </div>
 
-<footer th:include="fragments/footer :: footer"/>
+<th:block th:insert="~{fragments/footer :: footer}"/>
 
 </body>
 </html>

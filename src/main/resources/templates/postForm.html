@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Posts Form</title>
@@ -9,7 +9,7 @@
     <script src="/script/script.js"></script>
 </head>
 <body>
-<header th:include="fragments/header::header"/>
+<th:block th:insert="~{fragments/header::header}"/>
 
 <div class="container">
     <div class="post-container">
@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="post-content">
-                    <textarea id="content" name="content" type="text"
-                              th:value="${post.content}" placeholder="Type here..."></textarea>
+                    <textarea id="content" name="content" th:value="${post.content}"
+                              placeholder="Type here..."></textarea>
                 </div>
 
                 <div class="post-footer">
@@ -41,7 +41,8 @@
     </div>
 </div>
 
-<footer th:include="fragments/footer :: footer"/>
+<th:block th:insert="~{fragments/footer :: footer}"/>
+<!--<footer th:include="fragments/footer :: footer"/>-->
 
 </body>
 </html>

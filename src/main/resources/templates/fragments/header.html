@@ -8,7 +8,7 @@
     <h1><span class="nexus">Nexus</span> Blog</h1>
   </div>
 
-  <nav th:include="fragments/menu::menu" class="menu"/>
+  <th:block th:insert="~{fragments/menu::menu}" class="menu"/>
 
   <div class="user-area">
     <div sec:authorize="isAuthenticated()">

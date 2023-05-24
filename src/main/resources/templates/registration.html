@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-<header th:include="fragments/header::header"/>
+<th:block th:insert="~{fragments/header::header}"/>
 
 <div class="container">
     <div class="auth">
@@ -15,17 +15,17 @@
         <div class="form-style">
             <form class="reg-form" method="post" th:action="@{/registration}" th:object="${user}">
                 <div>
-                    <label>Username</label>
+                    <label for="username">Username</label>
                     <input id="username" name="username" type="text" placeholder="Enter username"/>
-                    <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"/>
+                    <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
                 </div>
                 <div>
-                    <label>Password</label>
-                    <input id="password" name="password" type="password" placeholder="Enter password"/>
+                    <label for="password">Password</label>
+                    <input  id="password" name="password" type="password" placeholder="Enter password"/>
                     <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"/>
                 </div>
                 <div>
-                    <label>Confirm</label>
+                    <label for="passwordConfirm">Confirm</label>
                     <input id="passwordConfirm" name="passwordConfirm"
                            type="password" placeholder="Confirm password"/>
                     <p class="error" th:errors="*{passwordConfirm}"
@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<footer th:include="fragments/footer :: footer"/>
+<th:block th:insert="~{fragments/footer :: footer}"/>
 
 </body>
 </html>

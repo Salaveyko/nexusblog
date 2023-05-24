@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-<header th:include="fragments/header::header"/>
+<th:block th:insert="~{fragments/header::header}"/>
 
 <div class="container">
     <div class="auth">
@@ -21,11 +21,11 @@
             </div>
             <form class="login-form" method="post" th:action="@{/login}">
                 <div>
-                    <label>Username</label>
+                    <label for="username">Username</label>
                     <input id="username" name="username" type="text" placeholder="Enter username">
                 </div>
                 <div>
-                    <label>Password</label>
+                    <label for="password">Password</label>
                     <input id="password" name="password" type="password" placeholder="Enter password">
                 </div>
                 <div class="form-action">
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<footer th:include="fragments/footer :: footer"/>
+<th:block th:insert="~{fragments/footer :: footer}"/>
 
 </body>
 </html>
