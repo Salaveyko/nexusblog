@@ -32,7 +32,6 @@ public class MyBlogController {
     @GetMapping("")
     public String mainBlog(Model model) {
         model.addAttribute("posts", postsService.getAll());
-        model.addAttribute("fragment", "fragments/posts::posts");
 
         return "index.html";
     }
