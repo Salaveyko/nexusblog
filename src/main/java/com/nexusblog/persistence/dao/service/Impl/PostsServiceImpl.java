@@ -20,8 +20,12 @@ import java.util.Optional;
 @Service
 public class PostsServiceImpl implements PostsService {
 
+    private final PostsRepository postsRepository;
+
     @Autowired
-    private PostsRepository postsRepository;
+    public PostsServiceImpl(PostsRepository postsRepository){
+        this.postsRepository = postsRepository;
+    }
 
     private User getCurrentUser() throws UserPrincipalNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

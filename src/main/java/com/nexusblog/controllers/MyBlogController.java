@@ -22,8 +22,12 @@ import java.util.Date;
 @RequestMapping("/blog")
 public class MyBlogController {
 
+    private final PostsService postsService;
+
     @Autowired
-    private PostsService postsService;
+    public MyBlogController(PostsService postsService) {
+        this.postsService = postsService;
+    }
 
     @GetMapping("")
     public String mainBlog(Model model) {
@@ -69,8 +73,8 @@ public class MyBlogController {
 
     @PostMapping("/update")
     public String updatePosts(@ModelAttribute("post") @Valid PostDto postDto,
-                           BindingResult result,
-                           Model model) throws UserPrincipalNotFoundException {
+                              BindingResult result,
+                              Model model) throws UserPrincipalNotFoundException {
 
         if (result.hasErrors()) {
             model.addAttribute("post", postDto);

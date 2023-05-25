@@ -15,13 +15,19 @@ import java.util.Collections;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    public  UserServiceImpl(UserRepository userRepository,
+                            RoleRepository roleRepository,
+                            PasswordEncoder passwordEncoder){
+
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
     @Override
     public void saveUser(UserDto userDto) {
         Role role = roleRepository.findByName(TbConstants.Roles.USER);
