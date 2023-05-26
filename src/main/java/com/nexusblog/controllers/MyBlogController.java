@@ -70,7 +70,7 @@ public class MyBlogController {
         return "postForm.html";
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public String updatePosts(@ModelAttribute("post") @Valid PostDto postDto,
                               BindingResult result,
                               Model model) throws UserPrincipalNotFoundException {
