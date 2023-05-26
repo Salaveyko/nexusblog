@@ -36,4 +36,13 @@ public class Post {
         this.user = user;
     }
 
+    public void setUser(User user){
+        setUser(user, false);
+    }
+    public void setUser(User user, boolean isBacksideSet){
+        if(!isBacksideSet){
+            user.addPost(this, true);
+        }
+        this.user = user;
+    }
 }

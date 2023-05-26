@@ -35,12 +35,34 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Post> posts;
 
     public User(String username, String password, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.isEnabled = true;
+    }
+
+    public void addRole(Role role){
+        addRole(role, false);
+    }
+    public void addRole(Role role, boolean isBacksideSet){
+        if(!isBacksideSet){
+            role.addUser(this, true);
+        }
+        roles.add(role);
+    }
+
+    public void addPost(Post post){
+        addPost(post, false);
+    }
+    public void addPost(Post post, boolean isBacksideSet){
+        if(!isBacksideSet){
+            post.setUser(this, true);
+        }
+        posts.add(post);
     }
 
     @Override

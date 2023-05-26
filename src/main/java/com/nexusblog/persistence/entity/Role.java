@@ -30,6 +30,16 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
+    public void addUser(User user){
+        addUser(user, false);
+    }
+    public void addUser(User user, boolean isBacksideSet){
+        if(!isBacksideSet){
+            user.addRole(this, true);
+        }
+        users.add(user);
+    }
+
     @Override
     public String getAuthority() {
         return getName();
