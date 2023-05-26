@@ -10,6 +10,7 @@ import com.nexusblog.util.TbConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
     @Override
+    @Transactional
     public void saveUser(UserDto userDto) {
         Role role = roleRepository.findByName(TbConstants.Roles.USER);
 
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }

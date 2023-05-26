@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.sql.Timestamp;
@@ -38,17 +39,20 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
+    @Transactional
     public List<Post> getAll() {
         return Lists.newArrayList(postsRepository.findAll());
     }
 
     @Override
+    @Transactional
     public List<Post> getMyPosts() throws UserPrincipalNotFoundException {
         User user = getCurrentUser();
         return Lists.newArrayList(postsRepository.findAllByUserId(user.getId()));
     }
 
     @Override
+    @Transactional
     public void save(PostDto postDto) throws UserPrincipalNotFoundException {
         Post post = new Post();
 
@@ -70,11 +74,13 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
+    @Transactional
     public void removeById(Long id) {
         postsRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public Post getPostById(Long id) throws PostNotFoundException {
         Optional<Post> post = postsRepository.findById(id);
         if (post.isPresent()) {
