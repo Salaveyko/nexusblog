@@ -1,6 +1,7 @@
 package com.nexusblog.persistence.dao.service.Impl;
 
 import com.nexusblog.persistence.dao.repository.UserRepository;
+import com.nexusblog.persistence.entity.Post;
 import com.nexusblog.persistence.entity.Role;
 import com.nexusblog.persistence.entity.User;
 import com.nexusblog.util.TbConstants;
@@ -11,8 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -29,18 +30,13 @@ class UserDetailsServiceImplTest {
     public void loadUserByUsernameTest_returnsCorrectUser() {
         String username = "admin";
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role(TbConstants.Roles.USER));
-        roles.add(new Role(TbConstants.Roles.ADMIN));
+        User expUser = new User("admin", "encodedPassword");
+        expUser.addRole(new Role(TbConstants.Roles.USER));
+        expUser.addRole(new Role(TbConstants.Roles.ADMIN));
+        expUser.addPost(new Post("title1","content1",new Date(), new Date()));
+        expUser.addPost(new Post("title2","content2",new Date(), new Date()));
 
-        User expUser = new User(
-                3L,
-                "admin",
-                "passwdAdmin",
-                true,
-                roles);
-
-        when(userRepository.findByUsername(username)).thenReturn(expUser);
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(expUser));
 
         UserDetails actUser = userDetailsService.loadUserByUsername(username);
 

@@ -20,18 +20,18 @@
                 <div class="post-title">
                     <input id="title" name="title" type="text"
                            th:value="${post.title}" placeholder="Enter title here..."/>
-                    <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"/>
+                    <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
                 </div>
 
                 <div class="post-content">
-                    <textarea id="content" name="content" th:value="${post.content}"
+                    <textarea id="content" name="content" th:text="${post.content}"
                               placeholder="Type here..."></textarea>
                 </div>
 
                 <div class="post-footer">
                     <input type="hidden" name="id" th:value="${post.id}"/>
                     <input type="hidden" name="created"
-                           th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm:ss')}"/>
+                           th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
 
                     <button type="submit">Save</button>
                 </div>
@@ -42,7 +42,6 @@
 </div>
 
 <th:block th:insert="~{fragments/footer :: footer}"/>
-<!--<footer th:include="fragments/footer :: footer"/>-->
 
 </body>
 </html>

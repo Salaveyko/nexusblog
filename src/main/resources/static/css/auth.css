@@ -42,4 +42,11 @@
     border-top: 1px solid #00ff00;
 }
 
+.remember-me label {
+    margin-left: 10px;
+}
 
+#remember-me{
+    margin: 5px 10px;
+    width: 5%;
+}

@@ -2,9 +2,9 @@ package com.nexusblog.controllers;
 
 import com.nexusblog.dto.UserDto;
 import com.nexusblog.persistence.dao.service.interfaces.UserService;
-import com.nexusblog.persistence.entity.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,9 +39,14 @@ public class AuthController {
                                BindingResult result,
                                Model model) {
 
-        User existUser = userService.findUserByUsername(userDto.getUsername());
+        boolean existUser = true;
+        try {
+            userService.findByUsername(userDto.getUsername());
+        } catch (UsernameNotFoundException e){
+            existUser = false;
+        }
 
-        if (existUser != null) {
+        if (existUser) {
             result.rejectValue("username", null,
                     "User already exists");
         }
@@ -55,6 +60,6 @@ public class AuthController {
         }
 
         userService.saveUser(userDto);
-        return "redirect:/registration?success";
+        return "redirect:/blog";
     }
 }

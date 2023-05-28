@@ -1,6 +1,6 @@
 package com.nexusblog.persistence.dao.service.Impl;
 
-import com.google.common.collect.Lists;
+import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.PostDto;
 import com.nexusblog.exceptions.PostNotFoundException;
 import com.nexusblog.persistence.dao.repository.PostsRepository;
@@ -15,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PostsServiceImpl implements PostsService {
@@ -40,23 +42,29 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     @Transactional
-    public List<Post> getAll() {
-        return Lists.newArrayList(postsRepository.findAll());
+    public Set<PostDto> getAll() {
+        return StreamSupport
+                .stream(postsRepository.findAll().spliterator(), false)
+                .map(ConverterDto::postToDto)
+                .collect(Collectors.toSet());
     }
 
     @Override
     @Transactional
-    public List<Post> getMyPosts() throws UserPrincipalNotFoundException {
+    public Set<PostDto> getMyPosts() throws UserPrincipalNotFoundException {
         User user = getCurrentUser();
-        return Lists.newArrayList(postsRepository.findAllByUserId(user.getId()));
+        return StreamSupport
+                .stream(postsRepository.findAllByUserId(user.getId()).spliterator(), false)
+                .map(ConverterDto::postToDto)
+                .collect(Collectors.toSet());
     }
 
     @Override
     @Transactional
-    public void save(PostDto postDto) throws UserPrincipalNotFoundException {
+    public PostDto save(PostDto postDto) throws UserPrincipalNotFoundException {
         Post post = new Post();
 
-        if(postDto.getId() != 0) {
+        if(postDto.getId() != null) {
             Optional<Post> postOpt = postsRepository.findById(postDto.getId());
             if (postOpt.isPresent()) {
                 post = postOpt.get();
@@ -68,9 +76,9 @@ public class PostsServiceImpl implements PostsService {
 
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setUpdated(postDto.getUpdated());
+        post.setUpdated(new Timestamp(System.currentTimeMillis()));
 
-        postsRepository.save(post);
+        return ConverterDto.postToDto(postsRepository.save(post));
     }
 
     @Override
@@ -81,10 +89,10 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     @Transactional
-    public Post getPostById(Long id) throws PostNotFoundException {
+    public PostDto getPostById(Long id) throws PostNotFoundException {
         Optional<Post> post = postsRepository.findById(id);
         if (post.isPresent()) {
-            return post.get();
+            return ConverterDto.postToDto(post.get());
         }
         throw new PostNotFoundException("Post not available");
     }

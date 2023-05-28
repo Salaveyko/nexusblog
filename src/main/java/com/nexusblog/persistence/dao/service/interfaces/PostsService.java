@@ -6,11 +6,12 @@ import com.nexusblog.persistence.entity.Post;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
+import java.util.Set;
 
 public interface PostsService {
-    List<Post> getAll();
-    List<Post> getMyPosts() throws UserPrincipalNotFoundException;
-    void save(PostDto postDto) throws UserPrincipalNotFoundException;
+    Set<PostDto> getAll();
+    Set<PostDto> getMyPosts() throws UserPrincipalNotFoundException;
+    PostDto save(PostDto postDto) throws UserPrincipalNotFoundException;
     void removeById(Long id);
-    Post getPostById(Long id) throws PostNotFoundException;
+    PostDto getPostById(Long id) throws PostNotFoundException;
 }

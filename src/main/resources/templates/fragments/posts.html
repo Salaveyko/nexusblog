@@ -9,21 +9,19 @@
 
         <div class="post" th:each="post, status : ${posts}">
             <div class="post-title">
-                <h4 class="user-name" th:text="${post.user.username}"/>
+                <h4 class="user-name" th:text="${post.username}"/>
                 <h3 classt="post-name" th:text="${post.title}"/>
             </div>
             <div class="post-content">
                 <p th:text="${post.content}"/>
             </div>
             <div class="post-footer">
-                <!--authUserId adding to attribute ONLY in MyBlogController.selfBlog().
-                It means that the div below will be displayed only when the method specified above is using-->
-                <div class="post-actions" th:if="${post.user.id == authUserId}">
+                <div class="post-actions" th:if="${post.username.equals(#authentication.name)}">
                     <a th:href="@{'/blog/remove/' + ${post.id}}">Remove</a>
                     <a th:href="@{'/blog/edit/' + ${post.id}}">Edit</a>
                 </div>
 
-                <p th:text="${post.updated}"/>
+                <p th:text="${#dates.format(post.updated, 'yyyy-MM-dd HH:mm')}"/>
             </div>
         </div>
     </div>

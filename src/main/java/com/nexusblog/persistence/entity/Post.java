@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,21 +29,28 @@ public class Post {
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
-    public Post(String title, String content, Date created, Date updated, User user) {
+    public Post(String title, String content, Date created, Date updated) {
         this.title = title;
         this.content = content;
         this.created = created;
         this.updated = updated;
-        this.user = user;
     }
 
-    public void setUser(User user){
-        setUser(user, false);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id)
+                && Objects.equals(title, post.title)
+                && Objects.equals(content, post.content)
+                && Objects.equals(created, post.created)
+                && Objects.equals(updated, post.updated)
+                && Objects.equals(user, post.user);
     }
-    public void setUser(User user, boolean isBacksideSet){
-        if(!isBacksideSet){
-            user.addPost(this, true);
-        }
-        this.user = user;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, created, updated, user);
     }
 }

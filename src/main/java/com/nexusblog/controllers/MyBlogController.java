@@ -38,11 +38,6 @@ public class MyBlogController {
 
     @GetMapping("/myblog")
     public String selfBlog(Model model) throws UserPrincipalNotFoundException {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof User) {
-            model.addAttribute("authUserId", ((User) principal).getId());
-        }
         model.addAttribute("posts", postsService.getMyPosts());
 
         return "index.html";
@@ -77,7 +72,7 @@ public class MyBlogController {
 
         if (result.hasErrors()) {
             model.addAttribute("post", postDto);
-            return "/edit";
+            return "/update";
         }
 
         postsService.save(postDto);
@@ -87,7 +82,7 @@ public class MyBlogController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 }

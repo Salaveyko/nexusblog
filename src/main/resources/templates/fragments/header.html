@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 <body>
@@ -12,6 +12,8 @@
 
   <div class="user-area">
     <div sec:authorize="isAuthenticated()">
+      <a href="#" th:text="${#authentication.name}"></a>
+      <span>|</span>
       <a th:href="@{'/logout'}">Logout</a>
     </div>
     <div sec:authorize="isAnonymous()">
