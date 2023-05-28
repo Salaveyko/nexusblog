@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService {
         Optional<Role> roleOpt = roleRepository.findByName(TbConstants.Roles.USER);
         Role role = roleOpt.orElseGet(() -> roleRepository.save(new Role(TbConstants.Roles.USER)));
 
+        userDto.setUsername(userDto.getUsername().substring(0,1).toUpperCase()
+                + userDto.getUsername().substring(1));
+
         User user = new User(
                 userDto.getUsername(),
                 passwordEncoder.encode(userDto.getPassword()));
