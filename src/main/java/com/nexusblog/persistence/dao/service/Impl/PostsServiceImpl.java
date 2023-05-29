@@ -8,12 +8,12 @@ import com.nexusblog.persistence.dao.service.interfaces.PostsService;
 import com.nexusblog.persistence.entity.Post;
 import com.nexusblog.persistence.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
@@ -30,16 +30,6 @@ public class PostsServiceImpl implements PostsService {
         this.postsRepository = postsRepository;
     }
 
-    private User getCurrentUser() throws UserPrincipalNotFoundException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = auth.getPrincipal();
-        if (principal instanceof User) {
-            return (User) principal;
-        } else {
-            throw new UserPrincipalNotFoundException("User principal not found");
-        }
-    }
-
     @Override
     @Transactional
     public Set<PostDto> getAll() {
@@ -50,18 +40,15 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
+    @PostFilter("filterObject.username == principal.username")
     @Transactional
-    public Set<PostDto> getMyPosts() throws UserPrincipalNotFoundException {
-        User user = getCurrentUser();
-        return StreamSupport
-                .stream(postsRepository.findAllByUserId(user.getId()).spliterator(), false)
-                .map(ConverterDto::postToDto)
-                .collect(Collectors.toSet());
+    public Set<PostDto> getMyPosts(){
+        return getAll();
     }
 
     @Override
     @Transactional
-    public PostDto save(PostDto postDto) throws UserPrincipalNotFoundException {
+    public PostDto save(PostDto postDto) {
         Post post = new Post();
 
         if(postDto.getId() != null) {
@@ -70,8 +57,9 @@ public class PostsServiceImpl implements PostsService {
                 post = postOpt.get();
             }
         } else {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            post.setUser((User)auth.getPrincipal());
             post.setCreated(new Timestamp(System.currentTimeMillis()));
-            post.setUser(getCurrentUser());
         }
 
         post.setTitle(postDto.getTitle());
