@@ -15,7 +15,7 @@
 
   <div class="user-area">
     <div sec:authorize="isAuthenticated()">
-      <a th:href="@{'/profile'}" th:text="${#authentication.name}"></a>
+      <a th:href="@{'/profile/' + ${#authentication.name}}" th:text="${#authentication.name}"></a>
       <span>|</span>
       <a th:href="@{'/logout'}">Logout</a>
     </div>

@@ -24,9 +24,8 @@ public class SecurityConfig {
                                         "/script/**"
                                 ).permitAll()
                                 .requestMatchers(
-                                        "/myblog/**",
                                         "/profile/**",
-                                        "/blog/add"
+                                        "/blog/**"
                                 ).hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(
                                         "/blog",

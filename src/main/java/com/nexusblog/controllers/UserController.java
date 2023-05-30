@@ -22,13 +22,6 @@ public class UserController {
         this.profileService = profileService;
     }
 
-    @GetMapping("")
-    public String profile(Model model) throws ProfileNotFoundException {
-        model.addAttribute("profile", profileService.get());
-
-        return "profile.html";
-    }
-
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Model model) throws ProfileNotFoundException {
         model.addAttribute("profile", profileService.get(username));

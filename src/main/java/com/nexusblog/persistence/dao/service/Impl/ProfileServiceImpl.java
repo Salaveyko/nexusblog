@@ -25,12 +25,6 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ProfileDto get() throws ProfileNotFoundException {
-        return get(SecurityContextHolder.getContext().getAuthentication().getName());
-    }
-
-    @Override
-    @Transactional
     public ProfileDto get(String username) throws ProfileNotFoundException {
         Optional<Profile> profileOpt = profileRepository.getByUser_Username(username);
         if (profileOpt.isEmpty()) {
