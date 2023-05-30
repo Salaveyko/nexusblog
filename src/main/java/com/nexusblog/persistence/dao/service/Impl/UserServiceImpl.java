@@ -5,6 +5,7 @@ import com.nexusblog.dto.UserDto;
 import com.nexusblog.persistence.dao.repository.RoleRepository;
 import com.nexusblog.persistence.dao.repository.UserRepository;
 import com.nexusblog.persistence.dao.service.interfaces.UserService;
+import com.nexusblog.persistence.entity.Profile;
 import com.nexusblog.persistence.entity.Role;
 import com.nexusblog.persistence.entity.User;
 import com.nexusblog.util.TbConstants;
@@ -46,7 +47,13 @@ public class UserServiceImpl implements UserService {
                 passwordEncoder.encode(userDto.getPassword()));
         user.addRole(role);
 
-        return ConverterDto.userToDto(userRepository.save(user));
+        Profile profile = new Profile();
+        profile.setUser(user);
+        user.setProfile(profile);
+
+        userRepository.save(user);
+
+        return ConverterDto.userToDto(user);
     }
 
     @Override

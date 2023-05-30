@@ -2,17 +2,15 @@ package com.nexusblog.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,28 +26,12 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
 
-    public Role(String name){
-        this.name = name;
-        users = new HashSet<>();
+    public Role(String name) {
+        this(0L, name, new HashSet<>());
     }
 
     @Override
     public String getAuthority() {
         return getName();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(id, role.id)
-                && Objects.equals(name, role.name)
-                && Objects.equals(users, role.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, users);
     }
 }

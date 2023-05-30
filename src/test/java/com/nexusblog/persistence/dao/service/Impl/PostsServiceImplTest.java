@@ -63,7 +63,7 @@ class PostsServiceImplTest {
     }
 
     @Test
-    void getAll_returnedCorrectPostsSet() {
+    void getAll_returnCorrectPostsSet() {
         Iterable<Post> returned = Collections.singleton(post);
         when(postsRepository.findAll()).thenReturn(returned);
 
@@ -88,14 +88,9 @@ class PostsServiceImplTest {
     }*/
 
     @Test
-    void save() {
+    void save_returnedSavedUser() {
         User user = post.getUser();
         PostDto expected = ConverterDto.postToDto(post);
-        PostDto actual = new PostDto(
-                expected.getTitle(),
-                expected.getContent(),
-                expected.getCreated(),
-                expected.getUpdated());
 
         when(postsRepository.save(any(Post.class))).thenReturn(post);
 
@@ -103,7 +98,7 @@ class PostsServiceImplTest {
         when(auth.getPrincipal()).thenReturn(user);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        actual = postsService.save(actual);
+        PostDto actual = postsService.save(expected);
 
         verify(postsRepository, times(1)).save(any(Post.class));
         assertEquals(expected, actual);

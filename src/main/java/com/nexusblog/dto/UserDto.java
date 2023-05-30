@@ -1,22 +1,15 @@
 package com.nexusblog.dto;
 
-import com.nexusblog.persistence.entity.Post;
-import com.nexusblog.persistence.entity.Role;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -31,6 +24,7 @@ public class UserDto {
     private boolean isEnabled;
     private Set<RoleDto> roles;
     private Set<PostDto> posts;
+    private ProfileDto profile;
 
     @Override
     public boolean equals(Object o) {
@@ -43,11 +37,12 @@ public class UserDto {
                 && Objects.equals(password, userDto.password)
                 && Objects.equals(passwordConfirm, userDto.passwordConfirm)
                 && Objects.equals(roles, userDto.roles)
-                && Objects.equals(posts, userDto.posts);
+                && Objects.equals(posts, userDto.posts)
+                && Objects.equals(profile, userDto.profile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, passwordConfirm, isEnabled, roles, posts);
+        return Objects.hash(id, username, password, passwordConfirm, isEnabled, roles, posts, profile);
     }
 }

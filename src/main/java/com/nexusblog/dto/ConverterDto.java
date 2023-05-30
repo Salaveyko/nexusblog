@@ -1,6 +1,7 @@
 package com.nexusblog.dto;
 
 import com.nexusblog.persistence.entity.Post;
+import com.nexusblog.persistence.entity.Profile;
 import com.nexusblog.persistence.entity.Role;
 import com.nexusblog.persistence.entity.User;
 
@@ -15,7 +16,8 @@ public class ConverterDto {
                 user.getUsername(),
                 user.isEnabled(),
                 user.getRoles().stream().map(ConverterDto::roleToDto).collect(Collectors.toSet()),
-                user.getPosts().stream().map(ConverterDto::postToDto).collect(Collectors.toSet())
+                user.getPosts().stream().map(ConverterDto::postToDto).collect(Collectors.toSet()),
+                ConverterDto.profileToDto(user.getProfile())
         );
     }
 
@@ -37,6 +39,17 @@ public class ConverterDto {
                 post.getCreated(),
                 post.getUpdated(),
                 post.getUser().getUsername()
+        );
+    }
+
+    public static ProfileDto profileToDto(Profile profile) {
+        return new ProfileDto(
+                profile.getId(),
+                profile.getName(),
+                profile.getSurname(),
+                profile.getMail(),
+                profile.getBirthdate(),
+                profile.getUser().getId()
         );
     }
 }

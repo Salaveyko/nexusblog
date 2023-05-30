@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
+  <title></title>
 </head>
 <body>
 <header th:fragment="header">
@@ -12,7 +15,7 @@
 
   <div class="user-area">
     <div sec:authorize="isAuthenticated()">
-      <a href="#" th:text="${#authentication.name}"></a>
+      <a th:href="@{'/profile'}" th:text="${#authentication.name}"></a>
       <span>|</span>
       <a th:href="@{'/logout'}">Logout</a>
     </div>

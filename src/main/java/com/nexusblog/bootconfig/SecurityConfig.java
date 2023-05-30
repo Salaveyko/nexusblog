@@ -21,12 +21,15 @@ public class SecurityConfig {
                         (auth) -> auth
                                 .requestMatchers(
                                         "/css/**",
-                                        "/script/**",
-                                        "/blog",
-                                        "/blog/add"
+                                        "/script/**"
                                 ).permitAll()
-                                .requestMatchers("/myblog/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(
+                                        "/myblog/**",
+                                        "/profile/**",
+                                        "/blog/add"
+                                ).hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(
+                                        "/blog",
                                         "/login",
                                         "/registration"
                                 ).anonymous()

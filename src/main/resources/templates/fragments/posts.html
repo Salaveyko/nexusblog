@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <title></title>
 </head>
 <body>
 <div class="container" th:fragment="posts">
@@ -9,8 +10,10 @@
 
         <div class="post" th:each="post, status : ${posts}">
             <div class="post-title">
-                <h4 class="user-name" th:text="${post.username}"/>
-                <h3 classt="post-name" th:text="${post.title}"/>
+                <a class="user-name" th:href="@{'/profile/' + ${post.username}}">
+                    <h4 th:text="${post.username}"/>
+                </a>
+                <h3 class="post-name" th:text="${post.title}"/>
             </div>
             <div class="post-content">
                 <p th:text="${post.content}"/>

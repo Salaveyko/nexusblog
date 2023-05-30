@@ -5,6 +5,7 @@ import com.nexusblog.dto.UserDto;
 import com.nexusblog.persistence.dao.repository.RoleRepository;
 import com.nexusblog.persistence.dao.repository.UserRepository;
 import com.nexusblog.persistence.entity.Post;
+import com.nexusblog.persistence.entity.Profile;
 import com.nexusblog.persistence.entity.Role;
 import com.nexusblog.persistence.entity.User;
 import com.nexusblog.util.TbConstants;
@@ -40,36 +41,34 @@ class UserServiceImplTest {
     
     @BeforeEach
     void init(){
-        user = new User("admin", "encodedPassword");
+        user = new User("Admin", "encodedPassword");
         user.addRole(new Role(TbConstants.Roles.USER));
-        user.addRole(new Role(TbConstants.Roles.ADMIN));
         user.addPost(new Post("title1","content1",new Date(), new Date()));
         user.addPost(new Post("title2","content2",new Date(), new Date()));
+        user.setProfile(new Profile("name", "surname", "email@mail.com", new Date()));
     }
 
     @Test
     void saveUser_correctAddingRoleAndEncodingPasswordThenSavingUser() {
         Role role = new Role(TbConstants.Roles.USER);
         Optional<Role> expOptRole = Optional.of(role);
-        UserDto userDto = ConverterDto.userToDto(user);
+        UserDto expected = ConverterDto.userToDto(user);
 
         when(roleRepository.findByName(TbConstants.Roles.USER)).thenReturn(expOptRole);
-        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encodedPassword");
+        when(passwordEncoder.encode(expected.getPassword())).thenReturn("encodedPassword");
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         when(userRepository.save(userCaptor.capture())).thenReturn(user);
 
-        userService.saveUser(userDto);
+        UserDto actual = userService.saveUser(expected);
 
         verify(roleRepository, times(1)).findByName(TbConstants.Roles.USER);
-        verify(passwordEncoder, times(1)).encode(userDto.getPassword());
+        verify(passwordEncoder, times(1)).encode(any(String.class));
         verify(userRepository, times(1)).save(any(User.class));
 
-        User capturedUser = userCaptor.getValue();
-        assertEquals(user.getUsername(), capturedUser.getUsername());
-        assertEquals(user.getUsername(), capturedUser.getUsername());
-        assertEquals(user.isEnabled(), capturedUser.isEnabled());
-        assertFalse(capturedUser.getRoles().isEmpty());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        assertEquals(expected.getPassword(), actual.getPassword());
+        assertEquals(expected.getRoles(), actual.getRoles());
     }
 
     @Test

@@ -32,7 +32,7 @@ span {
 button{
     width: 120px;
     height: 30px;
-    border: 0px;
+    border: 0;
     border-radius: 7px;
     font-weight: bold;
     background-color: #858585;
@@ -131,15 +131,15 @@ footer nav {
     justify-content: flex-start;
     flex-direction: column;
     border-radius: 10px 10px 0 0;
+    padding: 10px;
 }
 
-.post-title * {
-    margin: 10px auto 10px 50px;
-    padding-top: 10px;
-}
-
-.user-name, .post-title label {
+.user-name{
     color: #fff;
+    margin: 0 auto 0 50px;
+}
+.post-name{
+    margin: 0 auto 10px 50px;
 }
 
 .post-footer {
