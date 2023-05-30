@@ -6,7 +6,7 @@
 <body>
 <div class="container" th:fragment="posts">
     <div class="post-container">
-        <button class="post-creator" th:onclick="window.location.href='/blog/add';">Create new post</button>
+        <button class="post-creator" th:attr="onclick='window.location.href=\'/blog/add\''">Create new post</button>
 
         <div class="post" th:each="post, status : ${posts}">
             <div class="post-title">
