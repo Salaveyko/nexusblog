@@ -6,7 +6,7 @@ import com.nexusblog.exceptions.ProfileNotFoundException;
 import com.nexusblog.persistence.dao.repository.ProfileRepository;
 import com.nexusblog.persistence.dao.service.interfaces.ProfileService;
 import com.nexusblog.persistence.entity.Profile;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
-
-    @Autowired
-    public ProfileServiceImpl(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
-    }
 
     @Override
     @Transactional
@@ -45,10 +41,17 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         Profile profile = profileOpt.get();
+        profile.setAvatarPath(profileDto.getAvatarPath());
         profile.setName(profileDto.getName());
         profile.setSurname(profileDto.getSurname());
         profile.setBirthdate(profileDto.getBirthdate());
-        profile.setMail(profileDto.getMail());
+        profile.getContacts().setEmail(profileDto.getContacts().getEmail());
+        profile.getContacts().setPhone(profileDto.getContacts().getPhone());
+        profile.getAddress().setCountry(profileDto.getAddress().getCountry());
+        profile.getAddress().setStatement(profileDto.getAddress().getStatement());
+        profile.getAddress().setStreet(profileDto.getAddress().getStreet());
+        profile.getAddress().setBuildingNumber(profileDto.getAddress().getBuildingNumber());
+        profile.getAddress().setPostalCode(profileDto.getAddress().getPostalCode());
 
         return ConverterDto.profileToDto(profile);
     }

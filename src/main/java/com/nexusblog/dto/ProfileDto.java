@@ -11,9 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 public class ProfileDto {
     private Long id;
+    private String avatarPath;
     private String name;
     private String surname;
-    private String mail;
     private Date birthdate;
-    private Long userId;
+    private ProfileContactsDto contacts;
+    private AddressDto address;
+    private String username;
 }

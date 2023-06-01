@@ -87,6 +87,7 @@ footer {
     padding: 0 20px;
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
 }
 
 footer nav {
@@ -111,9 +112,8 @@ footer nav {
 .post-container {
     display: flex;
     flex-direction: column;
-    margin: 10px auto;
+    margin: auto;
     max-width: 900px;
-    margin-bottom: 20px;
 }
 
 .post-creator {
@@ -121,7 +121,7 @@ footer nav {
 }
 
 .post {
-    margin: 10px auto;
+    margin-top: 10px;
     width: 100%;
 }
 
@@ -131,7 +131,6 @@ footer nav {
     justify-content: flex-start;
     flex-direction: column;
     border-radius: 10px 10px 0 0;
-    padding: 10px;
 }
 
 .user-name{
@@ -139,7 +138,7 @@ footer nav {
     margin: 0 auto 0 50px;
 }
 .post-name{
-    margin: 0 auto 10px 50px;
+    margin: 0 auto 20px 50px;
 }
 
 .post-footer {

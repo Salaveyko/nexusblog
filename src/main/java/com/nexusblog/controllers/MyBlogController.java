@@ -4,7 +4,7 @@ import com.nexusblog.dto.PostDto;
 import com.nexusblog.exceptions.PostNotFoundException;
 import com.nexusblog.persistence.dao.service.interfaces.PostsService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,29 +16,25 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/blog")
 public class MyBlogController {
 
     private final PostsService postsService;
 
-    @Autowired
-    public MyBlogController(PostsService postsService) {
-        this.postsService = postsService;
-    }
-
     @GetMapping("")
     public String mainBlog(Model model) {
         model.addAttribute("posts", postsService.getAll());
 
-        return "index.html";
+        return "index";
     }
 
     @GetMapping("/myblog")
     public String selfBlog(Model model) throws UserPrincipalNotFoundException {
         model.addAttribute("posts", postsService.getMyPosts());
 
-        return "index.html";
+        return "index";
     }
 
     @GetMapping("/remove/{id}")
@@ -52,7 +48,7 @@ public class MyBlogController {
     public String editPost(@PathVariable("id") Long id, Model model) throws PostNotFoundException {
         model.addAttribute("post", postsService.getPostById(id));
 
-        return "postForm.html";
+        return "postForm";
     }
 
     @GetMapping("/add")
@@ -60,7 +56,7 @@ public class MyBlogController {
         PostDto postDto = new PostDto();
         model.addAttribute("post", postDto);
 
-        return "postForm.html";
+        return "postForm";
     }
 
     @PostMapping("/update")

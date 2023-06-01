@@ -7,6 +7,7 @@ import com.nexusblog.persistence.dao.repository.PostsRepository;
 import com.nexusblog.persistence.dao.service.interfaces.PostsService;
 import com.nexusblog.persistence.entity.Post;
 import com.nexusblog.persistence.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.Authentication;
@@ -21,14 +22,10 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@RequiredArgsConstructor
 public class PostsServiceImpl implements PostsService {
 
     private final PostsRepository postsRepository;
-
-    @Autowired
-    public PostsServiceImpl(PostsRepository postsRepository){
-        this.postsRepository = postsRepository;
-    }
 
     @Override
     @Transactional

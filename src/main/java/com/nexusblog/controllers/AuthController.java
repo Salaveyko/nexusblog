@@ -3,7 +3,7 @@ package com.nexusblog.controllers;
 import com.nexusblog.dto.UserDto;
 import com.nexusblog.persistence.dao.service.interfaces.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-
-    @Autowired
-    public AuthController(UserService userService){
-        this.userService = userService;
-    }
 
     @GetMapping("/login")
     public String login() {

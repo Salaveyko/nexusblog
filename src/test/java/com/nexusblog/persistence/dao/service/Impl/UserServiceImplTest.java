@@ -4,10 +4,7 @@ import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.UserDto;
 import com.nexusblog.persistence.dao.repository.RoleRepository;
 import com.nexusblog.persistence.dao.repository.UserRepository;
-import com.nexusblog.persistence.entity.Post;
-import com.nexusblog.persistence.entity.Profile;
-import com.nexusblog.persistence.entity.Role;
-import com.nexusblog.persistence.entity.User;
+import com.nexusblog.persistence.entity.*;
 import com.nexusblog.util.TbConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,11 +38,15 @@ class UserServiceImplTest {
     
     @BeforeEach
     void init(){
+        Profile profile = new Profile("name", "surname", new Date());
+        profile.setContacts(new ProfileContacts());
+        profile.setAddress(new Address());
+
         user = new User("Admin", "encodedPassword");
         user.addRole(new Role(TbConstants.Roles.USER));
         user.addPost(new Post("title1","content1",new Date(), new Date()));
         user.addPost(new Post("title2","content2",new Date(), new Date()));
-        user.setProfile(new Profile("name", "surname", "email@mail.com", new Date()));
+        user.setProfile(profile);
     }
 
     @Test

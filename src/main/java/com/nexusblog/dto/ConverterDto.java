@@ -1,9 +1,6 @@
 package com.nexusblog.dto;
 
-import com.nexusblog.persistence.entity.Post;
-import com.nexusblog.persistence.entity.Profile;
-import com.nexusblog.persistence.entity.Role;
-import com.nexusblog.persistence.entity.User;
+import com.nexusblog.persistence.entity.*;
 
 import java.util.stream.Collectors;
 
@@ -17,7 +14,7 @@ public class ConverterDto {
                 user.isEnabled(),
                 user.getRoles().stream().map(ConverterDto::roleToDto).collect(Collectors.toSet()),
                 user.getPosts().stream().map(ConverterDto::postToDto).collect(Collectors.toSet()),
-                ConverterDto.profileToDto(user.getProfile())
+                profileToDto(user.getProfile())
         );
     }
 
@@ -45,11 +42,30 @@ public class ConverterDto {
     public static ProfileDto profileToDto(Profile profile) {
         return new ProfileDto(
                 profile.getId(),
+                profile.getAvatarPath(),
                 profile.getName(),
                 profile.getSurname(),
-                profile.getMail(),
                 profile.getBirthdate(),
-                profile.getUser().getId()
+                profileContactToDto(profile.getContacts()),
+                addressToDto(profile.getAddress()),
+                profile.getUser().getUsername()
+        );
+    }
+    public static ProfileContactsDto profileContactToDto(ProfileContacts profileContacts){
+        return new ProfileContactsDto(
+                profileContacts.getId(),
+                profileContacts.getPhone(),
+                profileContacts.getEmail()
+        );
+    }
+    public static AddressDto addressToDto(Address address){
+        return new AddressDto(
+                address.getId(),
+                address.getCountry(),
+                address.getStatement(),
+                address.getStreet(),
+                address.getBuildingNumber(),
+                address.getPostalCode()
         );
     }
 }

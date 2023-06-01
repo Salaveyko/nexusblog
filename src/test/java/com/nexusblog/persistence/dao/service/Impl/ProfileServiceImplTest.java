@@ -4,7 +4,9 @@ import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.ProfileDto;
 import com.nexusblog.exceptions.ProfileNotFoundException;
 import com.nexusblog.persistence.dao.repository.ProfileRepository;
+import com.nexusblog.persistence.entity.Address;
 import com.nexusblog.persistence.entity.Profile;
+import com.nexusblog.persistence.entity.ProfileContacts;
 import com.nexusblog.persistence.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +39,12 @@ class ProfileServiceImplTest {
         user.setId(1L);
         profile = new Profile(
                 1L,
+                "",
                 "name",
                 "surname",
-                "e-mail@mail.com",
                 new Date(),
+                new ProfileContacts(),
+                new Address(),
                 user
         );
     }

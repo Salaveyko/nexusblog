@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,8 +26,7 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "is_enabled")
-    @ColumnDefault("true")
+    @Column(name = "is_enabled", columnDefinition = "BIT DEFAULT 1")
     private boolean isEnabled;
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)

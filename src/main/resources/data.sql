@@ -13,5 +13,12 @@ VALUES
     (1, 1),
     (1, 2);
 
-INSERT INTO profiles(name, users_id)
-VALUES ('admin', 1)
+INSERT INTO addresses(country)
+VALUES ('Ukraine');
+
+INSERT INTO user_contacts(email, phone)
+VALUES ('admin@mail.com', "+380988888888");
+
+INSERT INTO profiles(name, users_id, contact_id, address_id)
+VALUES ('admin', 1, 1, 1);
+
