@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,6 +57,6 @@ public class AuthController {
         }
 
         userService.saveUser(userDto);
-        return "redirect:/blog";
+        return "redirect:/login";
     }
 }

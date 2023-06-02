@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.Set;
@@ -22,8 +23,11 @@ public class UserDto {
     private String password;
     private String passwordConfirm;
     private boolean isEnabled;
+    @ToString.Exclude
     private Set<RoleDto> roles;
+    @ToString.Exclude
     private Set<PostDto> posts;
+    @ToString.Exclude
     private ProfileDto profile;
 
     @Override

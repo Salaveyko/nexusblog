@@ -6,6 +6,8 @@ import com.nexusblog.persistence.dao.service.interfaces.PostsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,40 +20,52 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/blog")
 public class MyBlogController {
 
     private final PostsService postsService;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String mainBlog(Model model) {
         model.addAttribute("posts", postsService.getAll());
-
         return "index";
     }
 
     @GetMapping("/myblog")
     public String selfBlog(Model model) throws UserPrincipalNotFoundException {
         model.addAttribute("posts", postsService.getMyPosts());
-
         return "index";
     }
 
-    @GetMapping("/remove/{id}")
-    public String removePost(@PathVariable("id") Long id) {
+    @GetMapping("/post/{id}/remove")
+    public String removePost(@PathVariable("id") Long id) throws PostNotFoundException {
+        PostDto post = postsService.getPostById(id);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!post.getUsername().equals(username))
+        {
+            throw new AccessDeniedException("You do not have permission to delete the post");
+        }
         postsService.removeById(id);
 
-        return "redirect:/blog/myblog";
+        return "redirect:/myblog";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/post/{id}/edit")
     public String editPost(@PathVariable("id") Long id, Model model) throws PostNotFoundException {
-        model.addAttribute("post", postsService.getPostById(id));
+        PostDto post = postsService.getPostById(id);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!post.getUsername().equals(username))
+        {
+            throw new AccessDeniedException("You do not have permission to edit the post");
+        }
+
+        model.addAttribute("post", post);
 
         return "postForm";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/new-post")
     public String addPost(Model model) {
         PostDto postDto = new PostDto();
         model.addAttribute("post", postDto);
@@ -59,19 +73,19 @@ public class MyBlogController {
         return "postForm";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/")
     public String updatePosts(@ModelAttribute("post") @Valid PostDto postDto,
                               BindingResult result,
                               Model model) throws UserPrincipalNotFoundException {
 
         if (result.hasErrors()) {
             model.addAttribute("post", postDto);
-            return "/update";
+            return "postForm";
         }
 
         postsService.save(postDto);
 
-        return "redirect:/blog/myblog";
+        return "redirect:/myblog";
     }
 
     @InitBinder

@@ -13,11 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -43,7 +46,7 @@ class ProfileServiceImplTest {
                 "name",
                 "surname",
                 new Date(),
-                new ProfileContacts(),
+                new ProfileContacts(1L,"asd@a.as", "lolo"),
                 new Address(),
                 user
         );
@@ -63,19 +66,25 @@ class ProfileServiceImplTest {
     }
 
     @Test
-    void update_returnSavedProfile() throws ProfileNotFoundException {
+    void update_returnSavedProfile() throws ProfileNotFoundException, IOException {
         ProfileDto expected = ConverterDto.profileToDto(profile);
         String username = profile.getUser().getUsername();
+
+        ClassPathResource imageResource = new ClassPathResource("img/test.jpg");
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file", "test.jpg", "image/jpeg", imageResource.getInputStream());
 
         Authentication auth = mock(Authentication.class);
         when(auth.getName()).thenReturn(username);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         when(profileRepository.getByUser_Username(username)).thenReturn(Optional.ofNullable(profile));
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
 
-        ProfileDto actual = profileService.update(expected);
+        ProfileDto actual = profileService.update(expected, multipartFile);
 
         verify(profileRepository, times(1)).getByUser_Username(any(String.class));
+        verify(profileRepository, times(1)).save(any(Profile.class));
         assertEquals(expected, actual);
     }
 }

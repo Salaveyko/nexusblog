@@ -7,15 +7,24 @@ import com.nexusblog.persistence.dao.repository.ProfileRepository;
 import com.nexusblog.persistence.dao.service.interfaces.ProfileService;
 import com.nexusblog.persistence.entity.Profile;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final ProfileRepository profileRepository;
 
@@ -32,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ProfileDto update(ProfileDto profileDto) throws ProfileNotFoundException {
+    public ProfileDto update(ProfileDto profileDto, MultipartFile file) throws ProfileNotFoundException, IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Profile> profileOpt = profileRepository.getByUser_Username(username);
 
@@ -40,19 +49,38 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ProfileNotFoundException("Profile don`t found");
         }
 
-        Profile profile = profileOpt.get();
-        profile.setAvatarPath(profileDto.getAvatarPath());
-        profile.setName(profileDto.getName());
-        profile.setSurname(profileDto.getSurname());
-        profile.setBirthdate(profileDto.getBirthdate());
-        profile.getContacts().setEmail(profileDto.getContacts().getEmail());
-        profile.getContacts().setPhone(profileDto.getContacts().getPhone());
-        profile.getAddress().setCountry(profileDto.getAddress().getCountry());
-        profile.getAddress().setStatement(profileDto.getAddress().getStatement());
-        profile.getAddress().setStreet(profileDto.getAddress().getStreet());
-        profile.getAddress().setBuildingNumber(profileDto.getAddress().getBuildingNumber());
-        profile.getAddress().setPostalCode(profileDto.getAddress().getPostalCode());
+        profileDto.setAvatarPath(updateFile(file, profileDto.getAvatarPath()));
+
+        Profile profile = profileRepository.save(
+                ConverterDto.profileFromDto(profileOpt.get(), profileDto));
 
         return ConverterDto.profileToDto(profile);
+    }
+
+    private String updateFile(MultipartFile file, String oldFilePath) throws IOException {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+            File uploadDir = new File(uploadPath + "/avatar");
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            File outputFile = new File(uploadDir + "/" + resultFilename);
+
+            Thumbnails.of(file.getInputStream())
+                    .size(200, 200)
+                    .outputFormat("jpg")
+                    .toFile(outputFile);
+
+            if (!oldFilePath.isEmpty()) {
+                File fileToDelete = new File(uploadDir + "/" + oldFilePath);
+                fileToDelete.delete();
+            }
+
+            return resultFilename;
+        }
+        return "";
     }
 }

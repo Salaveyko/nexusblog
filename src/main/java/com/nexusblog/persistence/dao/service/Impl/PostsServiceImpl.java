@@ -37,10 +37,13 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    @PostFilter("filterObject.username == principal.username")
     @Transactional
     public Set<PostDto> getMyPosts(){
-        return getAll();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return StreamSupport
+                .stream(postsRepository.findAllByUser_Username(username).spliterator(), false)
+                .map(ConverterDto::postToDto)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -79,6 +82,6 @@ public class PostsServiceImpl implements PostsService {
         if (post.isPresent()) {
             return ConverterDto.postToDto(post.get());
         }
-        throw new PostNotFoundException("Post not available");
+        throw new PostNotFoundException();
     }
 }

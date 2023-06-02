@@ -1,5 +1,6 @@
 package com.nexusblog.bootconfig;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -20,24 +21,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers(
-                                        "/static/**"
+                                        PathRequest.toStaticResources().atCommonLocations()
                                 ).permitAll()
                                 .requestMatchers(
-                                        "/blog",
+                                        "/",
                                         "/login",
                                         "/registration"
-                                ).anonymous()
+                                ).permitAll()
                                 .requestMatchers(
                                         "/profile/**",
-                                        "/blog/**"
+                                        "/**"
                                 ).hasAnyRole("USER", "ADMIN")
 
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/blog/myblog")
+                        .defaultSuccessUrl("/myblog")
                         .permitAll()
                 )
                 .rememberMe()
@@ -45,7 +46,7 @@ public class SecurityConfig {
                 .tokenValiditySeconds(86400)
                 .and()
                 .logout((logout) -> logout
-                        .logoutSuccessUrl("/blog")
+                        .logoutSuccessUrl("/")
                         .permitAll())
 
                 .exceptionHandling()

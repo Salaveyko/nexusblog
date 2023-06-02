@@ -1,16 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Nexus Blog</title>
+    <meta charset="UTF-8">
+    <title>Nexus Blog</title>
 
-  <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
 </head>
 <body>
 
 <th:block th:insert="~{fragments/header::header}"/>
-<th:block th:insert="~{fragments/posts::posts}"/>
+<div class="container">
+    <div class="post-container">
+        <button class="post-creator" th:attr="onclick='window.location.href=\'/new-post\''">Create new post</button>
+
+        <div class="post" th:each="post, status : ${posts}">
+            <div class="post-title">
+                <a class="user-name" th:href="@{'/profile/' + ${post.username}}">
+                    <h4 th:text="${post.username}"/>
+                </a>
+                <h3 class="post-name" th:text="${post.title}"/>
+            </div>
+            <div class="post-content">
+                <p th:text="${post.content}"/>
+            </div>
+            <div class="post-footer">
+                <div class="post-actions" th:if="${post.username.equals(#authentication.name)}">
+                    <a th:href="@{/post/{id}/remove(id=${post.id})}">Remove</a>
+                    <a th:href="@{/post/{id}/edit(id=${post.id})}">Edit</a>
+                </div>
+
+                <p th:text="${#dates.format(post.updated, 'yyyy-MM-dd HH:mm')}"/>
+            </div>
+        </div>
+    </div>
+</div>
 
 <th:block th:insert="~{fragments/footer :: footer}"/>
 </body>

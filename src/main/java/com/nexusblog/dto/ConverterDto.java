@@ -22,7 +22,7 @@ public class ConverterDto {
         RoleDto roleDto = new RoleDto(
                 role.getId(),
                 role.getName());
-        if(role.getUsers() != null){
+        if (role.getUsers() != null) {
             roleDto.setUserIds(role.getUsers().stream().map(User::getId).collect(Collectors.toSet()));
         }
         return roleDto;
@@ -51,14 +51,16 @@ public class ConverterDto {
                 profile.getUser().getUsername()
         );
     }
-    public static ProfileContactsDto profileContactToDto(ProfileContacts profileContacts){
+
+    public static ProfileContactsDto profileContactToDto(ProfileContacts profileContacts) {
         return new ProfileContactsDto(
                 profileContacts.getId(),
                 profileContacts.getPhone(),
                 profileContacts.getEmail()
         );
     }
-    public static AddressDto addressToDto(Address address){
+
+    public static AddressDto addressToDto(Address address) {
         return new AddressDto(
                 address.getId(),
                 address.getCountry(),
@@ -67,5 +69,38 @@ public class ConverterDto {
                 address.getBuildingNumber(),
                 address.getPostalCode()
         );
+    }
+
+    public static Profile profileFromDto(Profile profile, ProfileDto profileDto) {
+        profile.setAvatarPath(profileDto.getAvatarPath());
+        profile.setName(profileDto.getName());
+        profile.setSurname(profileDto.getSurname());
+        profile.setBirthdate(profileDto.getBirthdate());
+        profile.setContacts(
+                profileContactsFromDto(profile.getContacts(), profileDto.getContacts()));
+        profile.setAddress(
+                addressFromDto(profile.getAddress(), profileDto.getAddress()));
+
+        return profile;
+    }
+
+    public static Address addressFromDto(Address address, AddressDto addressDto) {
+        address.setCountry(addressDto.getCountry());
+        address.setStatement(addressDto.getStatement());
+        address.setStreet(addressDto.getStreet());
+        address.setBuildingNumber(addressDto.getBuildingNumber());
+        address.setPostalCode(addressDto.getPostalCode());
+        return address;
+    }
+
+    public static ProfileContacts profileContactsFromDto(ProfileContacts prfContacts,
+                                                         ProfileContactsDto prfContactsDto) {
+        if (!prfContactsDto.getEmail().isEmpty()) {
+            prfContacts.setEmail(prfContactsDto.getEmail());
+        }
+        if (!prfContactsDto.getPhone().isEmpty()) {
+            prfContacts.setPhone(prfContactsDto.getPhone());
+        }
+        return prfContacts;
     }
 }

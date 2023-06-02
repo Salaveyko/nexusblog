@@ -74,18 +74,22 @@ class PostsServiceImplTest {
         assertEquals(expected, actual);
     }
 
-    /*@Test
+    @Test
     void getMyPosts_returnedCorrectUserPostsSet() {
         Iterable<Post> returned = Collections.singleton(post);
 
-        when(postsRepository.findAllByUserId(any(Long.class))).thenReturn(returned);
+        when(postsRepository.findAllByUser_Username(any(String.class))).thenReturn(returned);
+
+        Authentication auth = mock(Authentication.class);
+        when(auth.getName()).thenReturn(post.getUser().getUsername());
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         Set<PostDto> expected = Collections.singleton(ConverterDto.postToDto(post));
         Set<PostDto> actual = postsService.getMyPosts();
 
-        verify(postsRepository, times(1)).findAll();
+        verify(postsRepository, times(1)).findAllByUser_Username(any(String.class));
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
     void save_returnedSavedUser() {

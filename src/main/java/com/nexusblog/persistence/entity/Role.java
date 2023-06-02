@@ -1,10 +1,7 @@
 package com.nexusblog.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
@@ -22,6 +19,7 @@ public class Role implements GrantedAuthority {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
+    @ToString.Exclude
     @Transient
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
