@@ -1,46 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}">>
 <head>
-    <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-<th:block th:insert="~{fragments/header::header}"/>
-
-<div class="container">
-    <div class="auth">
-        <h1>Registration</h1>
-        <div class="form-style">
-            <form class="reg-form" method="post" th:action="@{/registration}" th:object="${user}">
-                <div>
-                    <label for="username">Username</label>
-                    <input id="username" name="username" type="text" placeholder="Enter username"/>
-                    <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input  id="password" name="password" type="password" placeholder="Enter password"/>
-                    <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"/>
-                </div>
-                <div>
-                    <label for="passwordConfirm">Confirm</label>
-                    <input id="passwordConfirm" name="passwordConfirm"
-                           type="password" placeholder="Confirm password"/>
-                    <p class="error" th:errors="*{passwordConfirm}"
-                       th:if="${#fields.hasErrors('passwordConfirm')}"/>
-                </div>
-                <div class="form-action">
-                    <button type="submit">Register</button>
-                    <a th:href="@{/login}">Login</a>
-                </div>
-            </form>
-        </div>
+<div class="card mx-auto shadow mb-5 bg-body-tertiary rounded" style="width: 25rem;" layout:fragment="content">
+    <div class="card-header bg-secondary-subtle text-emphasis-secondary">
+        <h1 class="d-flex justify-content-center">Registration</h1>
     </div>
+
+    <form method="post" th:action="@{/registration}" th:object="${user}">
+        <div class="card-body">
+            <div>
+                <label for="username" class="form-label">Username</label>
+                <input id="username" name="username" class="form-control"
+                       type="text" placeholder="Enter username"/>
+                <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
+            </div>
+            <div>
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" class="form-control"
+                       type="password" placeholder="Enter password"/>
+                <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
+            </div>
+            <div>
+                <input id="passwordConfirm" class="form-control mt-2" name="passwordConfirm"
+                       type="password" placeholder="Confirm password"/>
+                <p class="error" th:errors="*{passwordConfirm}"
+                   th:if="${#fields.hasErrors('passwordConfirm')}"></p>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+            <a class="mx-2" th:href="@{/login}">Log In</a>
+        </div>
+    </form>
+
 </div>
-
-<th:block th:insert="~{fragments/footer :: footer}"/>
-
 </body>
 </html>

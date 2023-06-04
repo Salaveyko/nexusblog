@@ -1,58 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}">
 <head>
-    <meta charset="UTF-8">
     <title>Profile</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
 
-<th:block th:insert="~{fragments/header::header}"/>
+<div class="profile" layout:fragment="content">
+    <div class="card shadow mb-5 bg-body-tertiary rounded">
+        <h5 class="card-header" th:text="${profile.username}"/>
+        <div class="card-body">
+            <div class="row g-0">
+                <div class="col-md-2">
+                    <img class="img-fluid rounded-5"
+                         th:if="${profile.avatarPath != null}"
+                         th:src="@{'/uploads/avatar/' + ${profile.avatarPath}}"
+                         alt="Avatar"/>
+                </div>
+                <div class="col-md-4 ms-4">
+                    <h3 class="card-title"
+                        th:text="${(profile.name != null) ? profile.name : ''}
+                                + ${(profile.surname != null) ? ' ' + profile.surname : ''}"></h3>
+                    <p th:if="${profile.birthdate != null}"
+                       th:text="'Birthday: ' + ${#dates.format(profile.birthdate, 'yyyy MMMM d')}"></p>
+                    <div class="contacts mt-4">
+                        <p th:if="${profile.contacts.phone != null}"
+                           th:text="'Phone number: ' + ${profile.contacts.phone}"></p>
+                        <p th:if="${profile.contacts.email != null}"
+                           th:text="'E-Mail: ' + ${profile.contacts.email}"></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="card-title" th:text="Address"></h5>
+                    <p th:if="${profile.address.statement != null && profile.address.statement != ''}"
+                       th:text="'Statement: ' + ${profile.address.statement}"></p>
+                    <p th:if="${profile.address.street != null && profile.address.street != ''}"
+                       th:text="'Street: ' + ${profile.address.street}"></p>
+                    <p th:if="${profile.address.buildingNumber != null}"
+                       th:text="'Building number: ' + ${profile.address.buildingNumber}"></p>
+                    <p th:if="${profile.address.postalCode != null && profile.address.postalCode != ''}"
+                       th:text="'Postal code: ' + ${profile.address.postalCode}"></p>
+                </div>
+            </div>
 
-<div class="container">
-    <div class="profile">
-        <h1>Test Variant</h1>
-        <h1 th:text="${profile.username}"></h1>
-        <div class="main-info">
-            <img th:if="${profile.avatarPath != null}" th:src="@{'/uploads/avatar/' + ${profile.avatarPath}}" alt="Avatar"/>
-            <p th:if="${profile.name != null}" th:text="'Name: ' + ${profile.name}"></p>
-            <p th:if="${profile.surname != null}" th:text="'Surname: ' + ${profile.surname}"></p>
-            <p th:if="${profile.birthdate != null}" th:text="'Date of birth: ' + ${profile.birthdate}"></p>
         </div>
-        <div class="contacts-info">
-            <p th:if="${profile.contacts.phone != null}" th:text="'Phone number: ' + ${profile.contacts.phone}"></p>
-            <p th:if="${profile.contacts.email != null}" th:text="'E-Mail: ' + ${profile.contacts.email}"></p>
-        </div>
-        <form th:action="@{'/profile'}" method="post" th:object="${profile}" enctype="multipart/form-data">
-            <label for="email">E-mail</label>
-            <input id="email" name="contacts.email" type="email"
-                   th:value="${profile.contacts.email}" placeholder="E-mail"/>
-
-            <label for="country">Country</label>
-            <input id="country" name="address.country" type="text"
-                   th:value="${profile.address.country}" placeholder="Country"/>
-
-            <input type="file" name="file" accept=".jpg, .jpeg, .png"/>
-
-            <input type="hidden" name="username" th:value="${profile.username}"/>
-            <input type="hidden" name="id" th:value="${profile.id}"/>
-            <input type="hidden" name="avatarPath" th:value="${profile.avatarPath}"/>
-            <input type="hidden" name="name" th:value="${profile.name}"/>
-            <input type="hidden" name="surname" th:value="${profile.surname}"/>
-            <input type="hidden" name="birthdate" th:value="${profile.birthdate}"/>
-            <input type="hidden" name="contacts.id" th:value="${profile.contacts.id}"/>
-            <input type="hidden" name="contacts.phone" th:value="${profile.contacts.phone}"/>
-            <input type="hidden" name="address.statement" th:value="${profile.address.statement}"/>
-            <input type="hidden" name="address.street" th:value="${profile.address.street}"/>
-            <input type="hidden" name="address.buildingNumber" th:value="${profile.address.buildingNumber}"/>
-            <input type="hidden" name="address.postalCode" th:value="${profile.address.postalCode}"/>
-
-            <button type="submit">Apply</button>
-        </form>
     </div>
 </div>
-
-<th:block th:insert="~{fragments/footer :: footer}"/>
 </body>
 </html>

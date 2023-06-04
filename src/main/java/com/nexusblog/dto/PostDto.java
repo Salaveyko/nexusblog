@@ -21,6 +21,7 @@ public class PostDto {
     private Date created;
     private Date updated;
     private String username;
+    private String avatarPath;
 
     public PostDto(String title, String content, Date created, Date updated) {
         this.title = title;

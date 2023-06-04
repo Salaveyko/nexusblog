@@ -26,7 +26,8 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/",
                                         "/login",
-                                        "/registration"
+                                        "/registration",
+                                        "/uploads/**"
                                 ).permitAll()
                                 .requestMatchers(
                                         "/profile/**",

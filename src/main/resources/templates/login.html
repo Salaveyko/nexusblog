@@ -1,47 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}">
 <head>
-    <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-<th:block th:insert="~{fragments/header::header}"/>
+<div class="card mx-auto  shadow mb-5 bg-body-tertiary rounded" style="width: 25rem;" layout:fragment="content">
 
-<div class="container">
-    <div class="auth">
-        <h1>Login</h1>
-        <div class="form-style">
+    <div class="card-header bg-secondary-subtle text-emphasis-secondary">
+        <h1 class="d-flex justify-content-center">Login</h1>
+    </div>
+
+    <form method="post" th:action="@{/login}">
+        <div class="card-body">
             <div th:if="${param.error}">
                 <div class="error">*Invalid username or password</div>
             </div>
             <div th:if="${param.logout}">
                 <div class="success">You have been logged out</div>
             </div>
-            <form class="login-form" method="post" th:action="@{/login}">
-                <div>
-                    <label for="username">Username</label>
-                    <input id="username" name="username" type="text" placeholder="Enter username">
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" placeholder="Enter password">
-                </div>
-                <div class="remember-me">
-                    <label for="remember-me">Remember me:</label>
-                    <input id="remember-me" name="remember-me" type="checkbox" >
-                </div>
-                <div class="form-action">
-                    <button type="submit">Login</button>
-                    <a th:href="@{/registration}">Register</a>
-                </div>
-            </form>
+            <div>
+                <label for="username" class="form-label">Username</label>
+                <input id="username" class="form-control" name="username"
+                       type="text" placeholder="Enter username">
+            </div>
+            <div>
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" class="form-control"
+                       type="password" placeholder="Enter password">
+            </div>
+            <div class="remember-me my-3">
+                <label for="remember-me" class="form-label">Remember me:</label>
+                <input id="remember-me" name="remember-me" type="checkbox">
+            </div>
         </div>
-    </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Log In</button>
+            <a class="mx-2" th:href="@{/registration}">Sign In</a>
+        </div>
+    </form>
+
 </div>
-
-<th:block th:insert="~{fragments/footer :: footer}"/>
-
 </body>
 </html>

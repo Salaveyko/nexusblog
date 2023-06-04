@@ -1,47 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{index}">
 <head>
-    <meta charset="UTF-8">
     <title>Posts Form</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/post_form.css">
     <script src="/script/jquery-3.6.0.min.js"></script>
     <script src="/script/script.js"></script>
 </head>
 <body>
-<th:block th:insert="~{fragments/header::header}"/>
 
-<div class="container">
-    <div class="post-container">
-        <form th:action="@{'/'}" method="post" th:object="${post}">
+<div class="post-container justify-content-center" layout:fragment="content">
 
-            <div class="post-form">
+    <form th:action="@{'/'}" class="post-form" method="post" th:object="${post}">
 
-                <div class="post-title">
-                    <input id="title" name="title" type="text"
-                           th:value="${post.title}" placeholder="Enter title here..."/>
-                    <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
-                </div>
+        <div class="post-title">
+            <input id="title" name="title"  class="form-control" type="text"
+                   th:value="${post.title}" placeholder="Enter title here..."/>
+            <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
+        </div>
 
-                <div class="post-content">
-                    <textarea id="content" name="content" th:text="${post.content}"
-                              placeholder="Type here..."></textarea>
-                </div>
+        <div class="post-content my-3">
+                    <textarea id="content" name="content"  class="form-control  overflow-hidden"
+                              th:text="${post.content}" placeholder="Type here..."></textarea>
+        </div>
 
-                <div class="post-footer">
-                    <input type="hidden" name="id" th:value="${post.id}"/>
-                    <input type="hidden" name="created"
-                           th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
+        <div class="post-footer m-3">
+            <input type="hidden" name="id" th:value="${post.id}"/>
+            <input type="hidden" name="created"
+                   th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
 
-                    <button type="submit">Save</button>
-                </div>
-            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
 
-        </form>
-    </div>
+    </form>
 </div>
-
-<th:block th:insert="~{fragments/footer :: footer}"/>
-
 </body>
 </html>

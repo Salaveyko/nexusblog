@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -41,11 +40,15 @@ class UserServiceImplTest {
         Profile profile = new Profile("name", "surname", new Date());
         profile.setContacts(new ProfileContacts());
         profile.setAddress(new Address());
+        profile.setAvatarPath("");
+        Post post = new Post("title1","content1",new Date(), new Date());
+
 
         user = new User("Admin", "encodedPassword");
         user.addRole(new Role(TbConstants.Roles.USER));
-        user.addPost(new Post("title1","content1",new Date(), new Date()));
-        user.addPost(new Post("title2","content2",new Date(), new Date()));
+        user.addPost(post);
+        profile.setUser(user);
+        post.setUser(user);
         user.setProfile(profile);
     }
 

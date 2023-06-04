@@ -35,7 +35,8 @@ public class ConverterDto {
                 post.getContent(),
                 post.getCreated(),
                 post.getUpdated(),
-                post.getUser().getUsername()
+                post.getUser().getUsername(),
+                post.getUser().getProfile().getAvatarPath()
         );
     }
 

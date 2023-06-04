@@ -1,30 +1,7 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="en">
-<head>
-  <title></title>
-</head>
-<body>
-<header th:fragment="header">
-  <div class="logo">
-    <h1><span class="nexus">Nexus</span> Blog</h1>
-  </div>
+<header xmlns:th="http://www.thymeleaf.org"
+        th:fragment="header"
+        class="fixed-top">
 
-  <th:block th:insert="~{fragments/menu::menu}" class="menu"/>
+  <th:block th:insert="~{fragments/navigation::navigation}"/>
 
-  <div class="user-area">
-    <div sec:authorize="isAuthenticated()">
-      <a th:href="@{'/profile'}" th:text="${#authentication.name}"></a>
-      <span>|</span>
-      <a th:href="@{'/logout'}">Logout</a>
-    </div>
-    <div sec:authorize="isAnonymous()">
-      <a th:href="@{'/login'}">Login</a>
-      <span>|</span>
-      <a th:href="@{'/registration'}">Registration</a>
-    </div>
-  </div>
 </header>
-</body>
-</html>

@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary"
+     data-bs-theme="dark"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="navigation">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Nexus Blog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/myblog}">My blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled">Contacts</a>
+                </li>
+            </ul>
+           <th:block th:insert="~{fragments/user-bar::user-bar}"/>
+        </div>
+    </div>
+
+</nav>

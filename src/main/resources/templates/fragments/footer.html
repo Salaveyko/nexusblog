@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-</head>
-<body>
-</body>
-<footer th:fragment="footer">
-    <th:block th:insert="~{fragments/menu::menu}"/>
+<footer xmlns:th="http://www.thymeleaf.org"
+        th:fragment="footer"
+        class="text-bg-dark pb-5">
 
-    <div class="copyright">
+    <th:block th:insert="~{fragments/navigation::navigation}"/>
+
+    <div class="text-center mt-5 text-secondary">
         <h5>&copy;Soloveyko</h5>
     </div>
+
 </footer>
-</html>
