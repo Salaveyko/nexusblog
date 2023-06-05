@@ -70,9 +70,8 @@ class ProfileServiceImplTest {
         ProfileDto expected = ConverterDto.profileToDto(profile);
         String username = profile.getUser().getUsername();
 
-        ClassPathResource imageResource = new ClassPathResource("img/test.jpg");
         MockMultipartFile multipartFile = new MockMultipartFile(
-                "file", "test.jpg", "image/jpeg", imageResource.getInputStream());
+                "file", "test.jpg", "image/jpeg", new byte[0]);
 
         Authentication auth = mock(Authentication.class);
         when(auth.getName()).thenReturn(username);

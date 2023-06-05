@@ -49,7 +49,9 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ProfileNotFoundException("Profile don`t found");
         }
 
-        profileDto.setAvatarPath(updateFile(file, profileDto.getAvatarPath()));
+        if(!file.isEmpty()) {
+            profileDto.setAvatarPath(updateFile(file, profileDto.getAvatarPath()));
+        }
 
         Profile profile = profileRepository.save(
                 ConverterDto.profileFromDto(profileOpt.get(), profileDto));
@@ -71,7 +73,6 @@ public class ProfileServiceImpl implements ProfileService {
 
             Thumbnails.of(file.getInputStream())
                     .size(200, 200)
-                    .outputFormat("jpg")
                     .toFile(outputFile);
 
             if (!oldFilePath.isEmpty()) {

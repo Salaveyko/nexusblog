@@ -8,43 +8,161 @@
 <body>
 
 <div class="profile" layout:fragment="content">
+    <script>
+        function showEditForm() {
+            var infoElements = document.querySelectorAll('.info');
+            infoElements.forEach(function (element) {
+                element.classList.add('d-none');
+            });
+            infoElements = document.querySelectorAll('.info-edit');
+            infoElements.forEach(function (element) {
+                element.classList.remove('d-none');
+            });
+        }
+
+        function selectImg() {
+            document.querySelector('input.avatar').click();
+            return false;
+        }
+    </script>
     <div class="card shadow mb-5 bg-body-tertiary rounded">
-        <h5 class="card-header" th:text="${profile.username}"/>
-        <div class="card-body">
-            <div class="row g-0">
+        <h3 class="card-header" th:text="${profile.username}"/>
+
+        <form th:action="@{'/profile'}"
+              method="post"
+              th:object="${profile}"
+              enctype="multipart/form-data">
+
+            <div class="card-body row g-0">
+
                 <div class="col-md-2">
-                    <img class="img-fluid rounded-5"
+                    <img class="rounded-5"
                          th:if="${profile.avatarPath != null}"
                          th:src="@{'/uploads/avatar/' + ${profile.avatarPath}}"
                          alt="Avatar"/>
+
+                    <div class="info-edit text-center d-none">
+                        <a th:href="@{'#'}" th:attr="onclick='selectImg()'" th:text="'Change avatar'"/>
+                        <input class="avatar d-none" type="file" name="file" accept=".jpg, .jpeg, .png"/>
+                    </div>
                 </div>
-                <div class="col-md-4 ms-4">
-                    <h3 class="card-title"
+                <div class="col-md-4 ms-5">
+
+                    <h3 class="info card-title"
                         th:text="${(profile.name != null) ? profile.name : ''}
                                 + ${(profile.surname != null) ? ' ' + profile.surname : ''}"></h3>
-                    <p th:if="${profile.birthdate != null}"
-                       th:text="'Birthday: ' + ${#dates.format(profile.birthdate, 'yyyy MMMM d')}"></p>
+                    <p class="info" th:if="${profile.birthdate != null}"
+                       th:text="'Birthday: ' + ${#dates.format(profile.birthdate, 'd MMMM yyyy')}"></p>
+
+                    <div class="info-edit row d-none">
+                        <h3 class="card-title" th:text="'Personal'"></h3>
+
+                        <label class="mt-2" for="name" th:text="'Name:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="name" name="name"
+                                   th:value="${profile.name}"/>
+                        </div>
+
+                        <label class="mt-2" for="surname" th:text="'Surname:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="surname" name="surname"
+                                   th:value="${profile.surname}"/>
+                        </div>
+
+                        <label class="mt-2" for="birthdate" th:text="'Birthday:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="date" id="birthdate" name="birthdate"
+                                   th:value="${profile.birthdate}" th:field="${profile.birthdate}"/>
+                        </div>
+                    </div>
+
                     <div class="contacts mt-4">
-                        <p th:if="${profile.contacts.phone != null}"
-                           th:text="'Phone number: ' + ${profile.contacts.phone}"></p>
-                        <p th:if="${profile.contacts.email != null}"
-                           th:text="'E-Mail: ' + ${profile.contacts.email}"></p>
+                        <div class="info">
+                            <p th:if="${profile.contacts.phone != null}"
+                               th:text="'Phone number: ' + ${profile.contacts.phone}"></p>
+                            <p th:if="${profile.contacts.email != null}"
+                               th:text="'E-Mail: ' + ${profile.contacts.email}"></p>
+                        </div>
+
+                        <div class="info-edit row d-none">
+                            <h3 class="card-title" th:text="'Contacts'"></h3>
+
+                            <label class="mt-2" for="email" th:text="'E-mail:'"/>
+                            <div class="col sm-1 me-5">
+                                <input class="form-control" type="email" id="email" name="contacts.email"
+                                       th:value="${profile.contacts.email}" placeholder="E-mail"/>
+                            </div>
+
+                            <label class="mt-2" for="email" th:text="'Phone:'"/>
+                            <div class="col sm-1 me-5">
+                                <input class="form-control" type="text" id="phone" name="contacts.phone"
+                                       th:value="${profile.contacts.phone}" placeholder="Phone"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h5 class="card-title" th:text="Address"></h5>
-                    <p th:if="${profile.address.statement != null && profile.address.statement != ''}"
-                       th:text="'Statement: ' + ${profile.address.statement}"></p>
-                    <p th:if="${profile.address.street != null && profile.address.street != ''}"
-                       th:text="'Street: ' + ${profile.address.street}"></p>
-                    <p th:if="${profile.address.buildingNumber != null}"
-                       th:text="'Building number: ' + ${profile.address.buildingNumber}"></p>
-                    <p th:if="${profile.address.postalCode != null && profile.address.postalCode != ''}"
-                       th:text="'Postal code: ' + ${profile.address.postalCode}"></p>
+                    <div class="info">
+                        <h5 class="card-title" th:text="Address"></h5>
+                        <p th:if="${profile.address.statement != null && profile.address.statement != ''}"
+                           th:text="'Statement: ' + ${profile.address.statement}"></p>
+                        <p th:if="${profile.address.street != null && profile.address.street != ''}"
+                           th:text="'Street: ' + ${profile.address.street}"></p>
+                        <p th:if="${profile.address.buildingNumber != null}"
+                           th:text="'Building number: ' + ${profile.address.buildingNumber}"></p>
+                        <p th:if="${profile.address.postalCode != null && profile.address.postalCode != ''}"
+                           th:text="'Postal code: ' + ${profile.address.postalCode}"></p>
+                    </div>
+                    <div class="info-edit row d-none">
+                        <h3 class="card-title" th:text="'Address'"></h3>
+
+                        <label class="mt-2" for="country" th:text="'Country:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="country" name="address.country"
+                                   th:value="${profile.address.country}" placeholder="Country"/>
+                        </div>
+
+                        <label class="mt-2" for="statement" th:text="'Statement:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="statement" name="address.statement"
+                                   th:value="${profile.address.statement}" placeholder="Statement"/>
+                        </div>
+
+                        <label class="mt-2" for="street" th:text="'Street:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="street" name="address.street"
+                                   th:value="${profile.address.street}" placeholder="Street"/>
+                        </div>
+
+                        <label class="mt-2" for="buildingNumber" th:text="'Building number:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="buildingNumber" name="address.buildingNumber"
+                                   th:value="${profile.address.buildingNumber}" placeholder="Building number"/>
+                        </div>
+
+                        <label class="mt-2" for="postalCode" th:text="'Postal code:'"/>
+                        <div class="col sm-1 me-5">
+                            <input class="form-control" type="text" id="postalCode" name="address.postalCode"
+                                   th:value="${profile.address.postalCode}" placeholder="Postal code"/>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="info text-end col" th:if="${#authentication.name.equals(profile.username)}">
+                    <a th:href="'#'" th:text="'edit'" th:attr="onclick='showEditForm()'"></a>
                 </div>
             </div>
 
-        </div>
+            <div class="card-footer mt-2 info-edit d-none">
+                <input type="hidden" name="username" th:value="${profile.username}"/>
+                <input type="hidden" name="id" th:value="${profile.id}"/>
+                <input type="hidden" name="avatarPath" th:value="${profile.avatarPath}"/>
+                <input type="hidden" name="contacts.id" th:value="${profile.contacts.id}"/>
+
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

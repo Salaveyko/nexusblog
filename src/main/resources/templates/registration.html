@@ -14,13 +14,13 @@
     <form method="post" th:action="@{/registration}" th:object="${user}">
         <div class="card-body">
             <div>
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label" th:text="'Username'"></label>
                 <input id="username" name="username" class="form-control"
                        type="text" placeholder="Enter username"/>
                 <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
             </div>
             <div>
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label" th:text="'Password'"></label>
                 <input id="password" name="password" class="form-control"
                        type="password" placeholder="Enter password"/>
                 <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
@@ -35,7 +35,7 @@
 
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Sign In</button>
-            <a class="mx-2" th:href="@{/login}">Log In</a>
+            <a class="mx-2" th:href="@{/login}" th:text="'Log In'"></a>
         </div>
     </form>
 

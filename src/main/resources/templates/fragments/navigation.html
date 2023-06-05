@@ -12,13 +12,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">Blog</a>
+                    <a class="nav-link" th:href="@{/}" th:text="'Blog'"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/myblog}">My blog</a>
+                    <a class="nav-link" th:href="@{/myblog}" th:text="'My blog'"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled">Contacts</a>
+                    <a class="nav-link disabled" th:text="'Contacts'">Contacts</a>
                 </li>
             </ul>
            <th:block th:insert="~{fragments/user-bar::user-bar}"/>

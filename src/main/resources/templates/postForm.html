@@ -4,35 +4,37 @@
       layout:decorate="~{index}">
 <head>
     <title>Posts Form</title>
-    <script src="/script/jquery-3.6.0.min.js"></script>
-    <script src="/script/script.js"></script>
 </head>
 <body>
 
 <div class="post-container justify-content-center" layout:fragment="content">
-
-    <form th:action="@{'/'}" class="post-form" method="post" th:object="${post}">
-
-        <div class="post-title">
-            <input id="title" name="title"  class="form-control" type="text"
-                   th:value="${post.title}" placeholder="Enter title here..."/>
-            <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
+    <div class="card mt-4 shadow mb-5 bg-body-tertiary rounded">
+        <div class="card-header">
+            <h3 class="ms-4" th:text="post"></h3>
         </div>
+        <form th:action="@{'/'}" class="post-form" method="post" th:object="${post}">
 
-        <div class="post-content my-3">
-                    <textarea id="content" name="content"  class="form-control  overflow-hidden"
+            <div class="card-header">
+                <input id="title" name="title" class="form-control" type="text"
+                       th:value="${post.title}" placeholder="Enter title here..."/>
+                <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
+            </div>
+
+            <div class="card-body">
+                <div class="post-content my-3">
+                    <textarea id="content" name="content" class="form-control  overflow-hidden"
                               th:text="${post.content}" placeholder="Type here..."></textarea>
-        </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="hidden" name="id" th:value="${post.id}"/>
+                <input type="hidden" name="created"
+                       th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
 
-        <div class="post-footer m-3">
-            <input type="hidden" name="id" th:value="${post.id}"/>
-            <input type="hidden" name="created"
-                   th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-
-    </form>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

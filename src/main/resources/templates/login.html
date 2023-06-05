@@ -15,30 +15,30 @@
     <form method="post" th:action="@{/login}">
         <div class="card-body">
             <div th:if="${param.error}">
-                <div class="error">*Invalid username or password</div>
+                <div class="error" th:text="'*Invalid username or password'"></div>
             </div>
             <div th:if="${param.logout}">
-                <div class="success">You have been logged out</div>
+                <div class="success" th:text="'You have been logged out'"></div>
             </div>
             <div>
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label" th:text="'Username'"></label>
                 <input id="username" class="form-control" name="username"
                        type="text" placeholder="Enter username">
             </div>
             <div>
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label" th:text="'Password'"></label>
                 <input id="password" name="password" class="form-control"
                        type="password" placeholder="Enter password">
             </div>
             <div class="remember-me my-3">
-                <label for="remember-me" class="form-label">Remember me:</label>
+                <label for="remember-me" class="form-label" th:text="'Remember me:'"></label>
                 <input id="remember-me" name="remember-me" type="checkbox">
             </div>
         </div>
 
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Log In</button>
-            <a class="mx-2" th:href="@{/registration}">Sign In</a>
+            <a class="mx-2" th:href="@{/registration}" th:text="'Sign In'"></a>
         </div>
     </form>
 
