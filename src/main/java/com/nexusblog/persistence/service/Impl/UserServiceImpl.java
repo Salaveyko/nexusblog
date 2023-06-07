@@ -99,9 +99,12 @@ public class UserServiceImpl implements UserService {
 
         User user = verToken.getUser();
         user.setEnabled(true);
+
         userRepository.save(user);
+        tokenRepository.delete(verToken);
 
         authenticateUser(user, request, response);
+
     }
 
     public void authenticateUser(User user, HttpServletRequest request,
