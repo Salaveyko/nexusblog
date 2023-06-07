@@ -102,8 +102,10 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="info">
+                    <div class="info" th:if="${!profile.address.isEmpty()}">
                         <h5 class="card-title" th:text="Address"></h5>
+                        <p th:if="${profile.address.country != null && profile.address.country != ''}"
+                           th:text="'Country: ' + ${profile.address.country}"></p>
                         <p th:if="${profile.address.statement != null && profile.address.statement != ''}"
                            th:text="'Statement: ' + ${profile.address.statement}"></p>
                         <p th:if="${profile.address.street != null && profile.address.street != ''}"
