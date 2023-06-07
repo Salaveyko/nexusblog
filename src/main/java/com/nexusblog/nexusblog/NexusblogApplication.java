@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @ComponentScan("com.nexusblog")
 @EntityScan("com.nexusblog.persistence.entity")
-@EnableJpaRepositories("com.nexusblog.persistence.dao.repository")
+@EnableJpaRepositories("com.nexusblog.persistence.repository")
 public class NexusblogApplication {
 
 	public static void main(String[] args) {

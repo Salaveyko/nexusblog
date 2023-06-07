@@ -1,15 +1,13 @@
-package com.nexusblog.persistence.dao.service.Impl;
+package com.nexusblog.persistence.service.Impl;
 
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.PostDto;
 import com.nexusblog.exceptions.PostNotFoundException;
-import com.nexusblog.persistence.dao.repository.PostsRepository;
-import com.nexusblog.persistence.dao.service.interfaces.PostsService;
+import com.nexusblog.persistence.repository.PostsRepository;
+import com.nexusblog.persistence.service.interfaces.PostsService;
 import com.nexusblog.persistence.entity.Post;
 import com.nexusblog.persistence.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

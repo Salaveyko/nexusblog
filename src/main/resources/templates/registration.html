@@ -20,6 +20,11 @@
                 <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
             </div>
             <div>
+                <label for="email" class="form-label" th:text="'E-mail'"></label>
+                <input id="email" name="profile.contacts.email" class="form-control"
+                       type="email" placeholder="Enter e-mail"/>
+            </div>
+            <div>
                 <label for="password" class="form-label" th:text="'Password'"></label>
                 <input id="password" name="password" class="form-control"
                        type="password" placeholder="Enter password"/>

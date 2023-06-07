@@ -2,7 +2,7 @@ package com.nexusblog.controllers;
 
 import com.nexusblog.dto.PostDto;
 import com.nexusblog.exceptions.PostNotFoundException;
-import com.nexusblog.persistence.dao.service.interfaces.PostsService;
+import com.nexusblog.persistence.service.interfaces.PostsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;

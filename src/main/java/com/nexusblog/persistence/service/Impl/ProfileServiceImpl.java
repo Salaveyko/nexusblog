@@ -1,10 +1,10 @@
-package com.nexusblog.persistence.dao.service.Impl;
+package com.nexusblog.persistence.service.Impl;
 
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.ProfileDto;
 import com.nexusblog.exceptions.ProfileNotFoundException;
-import com.nexusblog.persistence.dao.repository.ProfileRepository;
-import com.nexusblog.persistence.dao.service.interfaces.ProfileService;
+import com.nexusblog.persistence.repository.ProfileRepository;
+import com.nexusblog.persistence.service.interfaces.ProfileService;
 import com.nexusblog.persistence.entity.Profile;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;

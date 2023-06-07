@@ -10,12 +10,11 @@ public class ConverterDto {
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getUsername(),
+                user.getPassword(),
                 user.isEnabled(),
                 user.getRoles().stream().map(ConverterDto::roleToDto).collect(Collectors.toSet()),
                 user.getPosts().stream().map(ConverterDto::postToDto).collect(Collectors.toSet()),
-                profileToDto(user.getProfile())
-        );
+                profileToDto(user.getProfile()));
     }
 
     public static RoleDto roleToDto(Role role) {
@@ -36,8 +35,7 @@ public class ConverterDto {
                 post.getCreated(),
                 post.getUpdated(),
                 post.getUser().getUsername(),
-                post.getUser().getProfile().getAvatarPath()
-        );
+                post.getUser().getProfile().getAvatarPath());
     }
 
     public static ProfileDto profileToDto(Profile profile) {
@@ -49,16 +47,14 @@ public class ConverterDto {
                 profile.getBirthdate(),
                 profileContactToDto(profile.getContacts()),
                 addressToDto(profile.getAddress()),
-                profile.getUser().getUsername()
-        );
+                profile.getUser().getUsername());
     }
 
     public static ProfileContactsDto profileContactToDto(ProfileContacts profileContacts) {
         return new ProfileContactsDto(
                 profileContacts.getId(),
                 profileContacts.getPhone(),
-                profileContacts.getEmail()
-        );
+                profileContacts.getEmail());
     }
 
     public static AddressDto addressToDto(Address address) {
@@ -68,8 +64,7 @@ public class ConverterDto {
                 address.getStatement(),
                 address.getStreet(),
                 address.getBuildingNumber(),
-                address.getPostalCode()
-        );
+                address.getPostalCode());
     }
 
     public static Profile profileFromDto(Profile profile, ProfileDto profileDto) {

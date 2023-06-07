@@ -1,6 +1,6 @@
-package com.nexusblog.persistence.dao.service.Impl;
+package com.nexusblog.persistence.service.Impl;
 
-import com.nexusblog.persistence.dao.repository.UserRepository;
+import com.nexusblog.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

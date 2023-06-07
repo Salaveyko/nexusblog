@@ -1,4 +1,4 @@
-package com.nexusblog.persistence.dao.repository;
+package com.nexusblog.persistence.repository;
 
 import com.nexusblog.persistence.entity.Profile;
 import org.springframework.data.repository.CrudRepository;

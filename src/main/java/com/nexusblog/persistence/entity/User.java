@@ -23,8 +23,14 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "is_enabled", columnDefinition = "BIT DEFAULT 1")
+    @Column(name = "is_enabled", columnDefinition = "BIT DEFAULT 0")
     private boolean isEnabled;
+    @Column(name = "account_non_expired", columnDefinition = "BIT DEFAULT 1")
+    private boolean accountNonExpired;
+    @Column(name = "account_non_locked", columnDefinition = "BIT DEFAULT 1")
+    private boolean accountNonLocked;
+    @Column(name = "credentials_non_expired", columnDefinition = "BIT DEFAULT 1")
+    private boolean credentialsNonExpired;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
@@ -42,7 +48,8 @@ public class User implements UserDetails {
     private Profile profile;
 
     public User(String username, String password) {
-        this(0L, username, password, true, new HashSet<>(), new HashSet<>(), new Profile());
+        this(0L, username, password, false, true, true,
+                true, new HashSet<>(), new HashSet<>(), new Profile());
     }
 
     public void addRole(Role role) {
@@ -58,7 +65,7 @@ public class User implements UserDetails {
         return roles;
     }
 
-    @Override
+  /*  @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -71,5 +78,5 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
+    }*/
 }

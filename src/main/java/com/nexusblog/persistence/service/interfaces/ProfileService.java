@@ -1,4 +1,4 @@
-package com.nexusblog.persistence.dao.service.interfaces;
+package com.nexusblog.persistence.service.interfaces;
 
 import com.nexusblog.dto.ProfileDto;
 import com.nexusblog.exceptions.ProfileNotFoundException;

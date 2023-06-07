@@ -2,9 +2,10 @@ package com.nexusblog.persistence.dao.service.Impl;
 
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.UserDto;
-import com.nexusblog.persistence.dao.repository.RoleRepository;
-import com.nexusblog.persistence.dao.repository.UserRepository;
+import com.nexusblog.persistence.repository.RoleRepository;
+import com.nexusblog.persistence.repository.UserRepository;
 import com.nexusblog.persistence.entity.*;
+import com.nexusblog.persistence.service.Impl.UserServiceImpl;
 import com.nexusblog.util.TbConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

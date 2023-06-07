@@ -2,11 +2,10 @@ package com.nexusblog.controllers;
 
 import com.nexusblog.dto.ProfileDto;
 import com.nexusblog.exceptions.ProfileNotFoundException;
-import com.nexusblog.persistence.dao.service.interfaces.ProfileService;
+import com.nexusblog.persistence.service.interfaces.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
