@@ -1,13 +1,11 @@
 package com.nexusblog.events.listener;
 
-import com.nexusblog.dto.UserDto;
 import com.nexusblog.events.event.OnRegistrationCompleteEvent;
+import com.nexusblog.persistence.entity.User;
 import com.nexusblog.persistence.service.interfaces.EmailService;
 import com.nexusblog.persistence.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -25,10 +23,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
-        UserDto user = event.getUser();
+        User user = event.getUser();
         String token = UUID.randomUUID().toString();
         userService.createVerificationToken(user, token);
-        String confUrl = String.format("%s/registrationConfirm?token=%s", event.getAppUrl(), token);
+        String confUrl = String.format("/registrationConfirm?token=%s", token);
 
         emailService.sendEmailVerifying(user, confUrl);
     }

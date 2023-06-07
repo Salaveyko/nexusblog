@@ -25,6 +25,8 @@ public class VerificationToken {
     private String token;
     @Column(name = "expiry_date")
     private Date expiryDate;
+    @Column(name="value_to_change")
+    private String valueToChange;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

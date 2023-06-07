@@ -50,6 +50,13 @@ public class ProfileController {
         return "profile";
     }
 
+    @GetMapping("emailConfirm")
+    public String confirmEmail(@RequestParam("token") String token){
+        profileService.checkVerificationToken(token);
+
+        return "redirect:/profile";
+    }
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

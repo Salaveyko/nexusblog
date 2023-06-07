@@ -1,13 +1,11 @@
 package com.nexusblog.controllers;
 
 import com.nexusblog.dto.UserDto;
-import com.nexusblog.events.event.OnRegistrationCompleteEvent;
 import com.nexusblog.persistence.service.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-    private final ApplicationEventPublisher eventPublisher;
 
     @GetMapping("/login")
     public String login() {
@@ -62,10 +59,7 @@ public class AuthController {
             return "/registration";
         }
 
-        UserDto registered = userService.saveUser(userDto);
-
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered,
-                request.getContextPath()));
+        userService.saveNewUser(userDto);
 
         return "redirect:/login";
     }

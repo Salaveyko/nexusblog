@@ -16,18 +16,18 @@
 
             <div class="card-header">
                 <input id="title" name="title" class="form-control" type="text"
-                       th:value="${post.title}" placeholder="Enter title here..."/>
+                       th:value="*{title}" placeholder="Enter title here..."/>
                 <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
             </div>
 
             <div class="card-body">
                 <div class="post-content my-3">
                     <textarea id="content" name="content" class="form-control  overflow-hidden"
-                              th:text="${post.content}" placeholder="Type here..."></textarea>
+                              th:text="*{content}" placeholder="Type here..."></textarea>
                 </div>
             </div>
             <div class="card-footer">
-                <input type="hidden" name="id" th:value="${post.id}"/>
+                <input type="hidden" name="id" th:value="*{id}"/>
                 <input type="hidden" name="created"
                        th:value="${#dates.format(post.created, 'yyyy-MM-dd HH:mm')}"/>
 

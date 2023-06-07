@@ -1,21 +1,28 @@
 package com.nexusblog.persistence.service.Impl;
 
+import com.google.common.base.VerifyException;
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.ProfileDto;
+import com.nexusblog.events.event.OnChangeEmailEvent;
 import com.nexusblog.exceptions.ProfileNotFoundException;
-import com.nexusblog.persistence.repository.ProfileRepository;
-import com.nexusblog.persistence.service.interfaces.ProfileService;
 import com.nexusblog.persistence.entity.Profile;
+import com.nexusblog.persistence.entity.VerificationToken;
+import com.nexusblog.persistence.repository.ProfileRepository;
+import com.nexusblog.persistence.repository.TokenRepository;
+import com.nexusblog.persistence.service.interfaces.ProfileService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,8 +32,9 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     @Value("${upload.path}")
     private String uploadPath;
-
+    private final TokenRepository tokenRepository;
     private final ProfileRepository profileRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -41,22 +49,59 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ProfileDto update(ProfileDto profileDto, MultipartFile file) throws ProfileNotFoundException, IOException {
+    public ProfileDto update(ProfileDto profileDto, MultipartFile file)
+            throws ProfileNotFoundException, IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Profile> profileOpt = profileRepository.getByUser_Username(username);
 
         if (profileOpt.isEmpty()) {
             throw new ProfileNotFoundException("Profile don`t found");
         }
-
-        if(!file.isEmpty()) {
+        if (!file.isEmpty()) {
             profileDto.setAvatarPath(updateFile(file, profileDto.getAvatarPath()));
         }
 
-        Profile profile = profileRepository.save(
-                ConverterDto.profileFromDto(profileOpt.get(), profileDto));
+        String newEmail = profileDto.getContacts().getEmail();
+        Profile profile = profileOpt.get();
+        profileDto.getContacts().setEmail(profile.getContacts().getEmail());
+
+        profileRepository.save(
+                ConverterDto.profileFromDto(profile, profileDto));
+
+        if (!newEmail.equals(profile.getContacts().getEmail())) {
+            eventPublisher.publishEvent(new OnChangeEmailEvent(profile, newEmail));
+        }
 
         return ConverterDto.profileToDto(profile);
+    }
+
+    @Override
+    @Transactional
+    public void createVerificationToken(Profile profile, String email, String token) {
+        Optional<Profile> profileOpt = profileRepository.findById(profile.getId());
+        if (profileOpt.isEmpty()) throw new UsernameNotFoundException("Profile don`t exist");
+
+        VerificationToken verToken = new VerificationToken(token, profileOpt.get().getUser());
+        verToken.setValueToChange(email);
+        tokenRepository.save(verToken);
+    }
+
+    @Override
+    public void checkVerificationToken(String token) {
+        Optional<VerificationToken> verTokenOpt = tokenRepository.findByToken(token);
+        if(verTokenOpt.isEmpty()) throw new VerifyException("Invalid verification token");
+
+        VerificationToken verToken = verTokenOpt.get();
+        Calendar cal = Calendar.getInstance();
+        if(verToken.getExpiryDate().getTime() - cal.getTime().getTime() <= 0){
+            throw  new VerifyException("Time expired");
+        }
+
+        Profile profile  = verToken.getUser().getProfile();
+        profile.getContacts().setEmail(verToken.getValueToChange());
+
+        profileRepository.save(profile);
+        tokenRepository.delete(verToken);
     }
 
     private String updateFile(MultipartFile file, String oldFilePath) throws IOException {

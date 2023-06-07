@@ -3,6 +3,7 @@ package com.nexusblog.persistence.service.Impl;
 import com.google.common.base.VerifyException;
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.UserDto;
+import com.nexusblog.events.event.OnRegistrationCompleteEvent;
 import com.nexusblog.persistence.entity.*;
 import com.nexusblog.persistence.repository.RoleRepository;
 import com.nexusblog.persistence.repository.TokenRepository;
@@ -12,6 +13,7 @@ import com.nexusblog.util.TbConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,10 +36,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final SecurityContextRepository securityContextRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
-    public UserDto saveUser(UserDto userDto) {
+    public UserDto saveNewUser(UserDto userDto) {
         Optional<Role> roleOpt = roleRepository.findByName(TbConstants.Roles.USER);
         Role role = roleOpt.orElseGet(() -> roleRepository.save(new Role(TbConstants.Roles.USER)));
 
@@ -59,6 +62,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+
         return ConverterDto.userToDto(user);
     }
 
@@ -74,8 +79,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void createVerificationToken(UserDto userDto, String token) {
-        Optional<User> userOpt = userRepository.findByUsername(userDto.getUsername());
+    public void createVerificationToken(User user, String token) {
+        Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
         if (userOpt.isEmpty()) throw new UsernameNotFoundException("User not found");
 
         VerificationToken myToken = new VerificationToken(token, userOpt.get());
@@ -85,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void checkVerificationToken(String token, HttpServletRequest request,
-                                          HttpServletResponse response) {
+                                       HttpServletResponse response) {
         Optional<VerificationToken> verTokenOpt = tokenRepository.findByToken(token);
         if (verTokenOpt.isEmpty()) {
             throw new VerifyException("Invalid verification token");
@@ -108,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void authenticateUser(User user, HttpServletRequest request,
-                                   HttpServletResponse response){
+                                 HttpServletResponse response) {
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 user, user.getPassword(), user.getAuthorities());
