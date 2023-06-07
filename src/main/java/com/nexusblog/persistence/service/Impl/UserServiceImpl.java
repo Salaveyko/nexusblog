@@ -1,13 +1,12 @@
 package com.nexusblog.persistence.service.Impl;
 
-import com.google.common.base.VerifyException;
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.UserDto;
 import com.nexusblog.events.event.OnRegistrationCompleteEvent;
 import com.nexusblog.persistence.entity.*;
 import com.nexusblog.persistence.repository.RoleRepository;
-import com.nexusblog.persistence.repository.TokenRepository;
 import com.nexusblog.persistence.repository.UserRepository;
+import com.nexusblog.persistence.service.interfaces.TokenService;
 import com.nexusblog.persistence.service.interfaces.UserService;
 import com.nexusblog.util.TbConstants;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Optional;
 
 @Service
@@ -34,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
     private final SecurityContextRepository securityContextRepository;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -84,32 +82,22 @@ public class UserServiceImpl implements UserService {
         if (userOpt.isEmpty()) throw new UsernameNotFoundException("User not found");
 
         VerificationToken myToken = new VerificationToken(token, userOpt.get());
-        tokenRepository.save(myToken);
+        tokenService.save(myToken);
     }
 
     @Override
     @Transactional
     public void checkVerificationToken(String token, HttpServletRequest request,
                                        HttpServletResponse response) {
-        Optional<VerificationToken> verTokenOpt = tokenRepository.findByToken(token);
-        if (verTokenOpt.isEmpty()) {
-            throw new VerifyException("Invalid verification token");
-        }
-
-        VerificationToken verToken = verTokenOpt.get();
-        Calendar calendar = Calendar.getInstance();
-        if (verToken.getExpiryDate().getTime() - calendar.getTime().getTime() <= 0) {
-            throw new VerifyException("Time expired");
-        }
+        VerificationToken verToken = tokenService.verify(token);
 
         User user = verToken.getUser();
         user.setEnabled(true);
 
         userRepository.save(user);
-        tokenRepository.delete(verToken);
+        tokenService.delete(verToken);
 
         authenticateUser(user, request, response);
-
     }
 
     public void authenticateUser(User user, HttpServletRequest request,

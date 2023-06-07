@@ -1,6 +1,5 @@
 package com.nexusblog.persistence.service.Impl;
 
-import com.google.common.base.VerifyException;
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.ProfileDto;
 import com.nexusblog.events.event.OnChangeEmailEvent;
@@ -8,8 +7,8 @@ import com.nexusblog.exceptions.ProfileNotFoundException;
 import com.nexusblog.persistence.entity.Profile;
 import com.nexusblog.persistence.entity.VerificationToken;
 import com.nexusblog.persistence.repository.ProfileRepository;
-import com.nexusblog.persistence.repository.TokenRepository;
 import com.nexusblog.persistence.service.interfaces.ProfileService;
+import com.nexusblog.persistence.service.interfaces.TokenService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +30,7 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     @Value("${upload.path}")
     private String uploadPath;
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
     private final ProfileRepository profileRepository;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -83,25 +81,18 @@ public class ProfileServiceImpl implements ProfileService {
 
         VerificationToken verToken = new VerificationToken(token, profileOpt.get().getUser());
         verToken.setValueToChange(email);
-        tokenRepository.save(verToken);
+        tokenService.save(verToken);
     }
 
     @Override
     public void checkVerificationToken(String token) {
-        Optional<VerificationToken> verTokenOpt = tokenRepository.findByToken(token);
-        if(verTokenOpt.isEmpty()) throw new VerifyException("Invalid verification token");
-
-        VerificationToken verToken = verTokenOpt.get();
-        Calendar cal = Calendar.getInstance();
-        if(verToken.getExpiryDate().getTime() - cal.getTime().getTime() <= 0){
-            throw  new VerifyException("Time expired");
-        }
+        VerificationToken verToken = tokenService.verify(token);
 
         Profile profile  = verToken.getUser().getProfile();
         profile.getContacts().setEmail(verToken.getValueToChange());
 
         profileRepository.save(profile);
-        tokenRepository.delete(verToken);
+        tokenService.delete(verToken);
     }
 
     private String updateFile(MultipartFile file, String oldFilePath) throws IOException {
