@@ -1,6 +1,6 @@
 package com.nexusblog.exceptions;
 
-public class PostNotFoundException extends Exception{
+public class PostNotFoundException extends RuntimeException{
     public PostNotFoundException(){
         super("Post not found");
     }

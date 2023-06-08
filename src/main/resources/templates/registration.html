@@ -17,30 +17,32 @@
                 <label for="username" class="form-label" th:text="'Username'"></label>
                 <input id="username" name="username" class="form-control"
                        type="text" placeholder="Enter username"/>
-                <p class="error" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
+                <p class="text-danger" th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
             </div>
             <div>
                 <label for="email" class="form-label" th:text="'E-mail'"></label>
                 <input id="email" name="profile.contacts.email" class="form-control"
                        type="email" placeholder="Enter e-mail"/>
+                <p class="text-danger" th:errors="*{profile.contacts.email}"
+                   th:if="${#fields.hasErrors('profile.contacts.email')}"></p>
             </div>
             <div>
                 <label for="password" class="form-label" th:text="'Password'"></label>
                 <input id="password" name="password" class="form-control"
                        type="password" placeholder="Enter password"/>
-                <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
+                <p class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
             </div>
             <div>
                 <input id="passwordConfirm" class="form-control mt-2" name="passwordConfirm"
                        type="password" placeholder="Confirm password"/>
-                <p class="error" th:errors="*{passwordConfirm}"
+                <p class="text-danger" th:errors="*{passwordConfirm}"
                    th:if="${#fields.hasErrors('passwordConfirm')}"></p>
             </div>
         </div>
 
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Sign In</button>
-            <a class="mx-2" th:href="@{/login}" th:text="'Log In'"></a>
+            <a class="mx-2" th:href="@{/login}" th:text="'Sign in'"></a>
         </div>
     </form>
 

@@ -75,11 +75,10 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     @Transactional
-    public PostDto getPostById(Long id) throws PostNotFoundException {
+    public PostDto getPostById(Long id) {
         Optional<Post> post = postsRepository.findById(id);
-        if (post.isPresent()) {
-            return ConverterDto.postToDto(post.get());
-        }
-        throw new PostNotFoundException();
+        if (post.isEmpty()) throw new PostNotFoundException();
+
+        return ConverterDto.postToDto(post.get());
     }
 }

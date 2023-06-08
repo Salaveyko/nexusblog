@@ -47,7 +47,7 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Profile profile;
 
-    public User(String username, String password) {
+    public User(String   username, String password) {
         this(0L, username, password, false, true, true,
                 true, new HashSet<>(), new HashSet<>(), new Profile());
     }

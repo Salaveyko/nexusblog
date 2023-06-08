@@ -17,10 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +42,8 @@ class PostsServiceImplTest {
                 "content",
                 new Date(),
                 new Date(),
-                user
+                user,
+                new HashSet<>()
         );
     }
 
@@ -106,7 +104,7 @@ class PostsServiceImplTest {
     }
 
     @Test
-    void getPostById_return() throws PostNotFoundException {
+    void getPostById_return() {
         PostDto expected = ConverterDto.postToDto(post);
 
         when(postsRepository.findById(any(Long.class))).thenReturn(Optional.of(post));

@@ -35,7 +35,10 @@ public class ConverterDto {
                 post.getCreated(),
                 post.getUpdated(),
                 post.getUser().getUsername(),
-                post.getUser().getProfile().getAvatarPath());
+                post.getUser().getProfile().getAvatarPath(),
+                (post.getComments() != null)
+                        ? post.getComments().stream().map(ConverterDto::commentToDto).collect(Collectors.toSet())
+                        : null);
     }
 
     public static ProfileDto profileToDto(Profile profile) {
@@ -65,6 +68,15 @@ public class ConverterDto {
                 address.getStreet(),
                 address.getBuildingNumber(),
                 address.getPostalCode());
+    }
+
+    public static CommentDto commentToDto(Comment comment) {
+        return new CommentDto(
+                comment.getId(),
+                comment.getContent(),
+                comment.getCreated(),
+                comment.getPost().getId(),
+                comment.getUser().getUsername());
     }
 
     public static Profile profileFromDto(Profile profile, ProfileDto profileDto) {

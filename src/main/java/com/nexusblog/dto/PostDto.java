@@ -2,15 +2,12 @@ package com.nexusblog.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
@@ -22,29 +19,13 @@ public class PostDto {
     private Date updated;
     private String username;
     private String avatarPath;
+    private Set<CommentDto> comments;
 
     public PostDto(String title, String content, Date created, Date updated) {
         this.title = title;
         this.content = content;
         this.created = created;
         this.updated = updated;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PostDto postDto = (PostDto) o;
-        return Objects.equals(id, postDto.id)
-                && Objects.equals(title, postDto.title)
-                && Objects.equals(content, postDto.content)
-                && Objects.equals(created, postDto.created)
-                && Objects.equals(updated, postDto.updated)
-                && Objects.equals(username, postDto.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, content, created, updated, username);
+        this.comments = new HashSet<>();
     }
 }

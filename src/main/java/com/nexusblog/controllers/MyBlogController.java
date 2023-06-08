@@ -1,7 +1,8 @@
 package com.nexusblog.controllers;
 
+import com.nexusblog.dto.CommentDto;
 import com.nexusblog.dto.PostDto;
-import com.nexusblog.exceptions.PostNotFoundException;
+import com.nexusblog.persistence.service.interfaces.CommentService;
 import com.nexusblog.persistence.service.interfaces.PostsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Date;
 public class MyBlogController {
 
     private final PostsService postsService;
+    private final CommentService commentService;
 
     @GetMapping("/")
     public String mainBlog(Model model) {
@@ -31,13 +33,36 @@ public class MyBlogController {
     }
 
     @GetMapping("/myblog")
-    public String selfBlog(Model model) throws UserPrincipalNotFoundException {
+    public String selfBlog(Model model) {
         model.addAttribute("posts", postsService.getMyPosts());
         return "index";
     }
 
+    @GetMapping("/post/{id}")
+    public String post(@PathVariable("id") Long id, Model model){
+        model.addAttribute("post", postsService.getPostById(id));
+        model.addAttribute("comment", new CommentDto());
+
+        return "post";
+    }
+    @PostMapping("/post/{id}")
+    public String newComment(@PathVariable("id")Long id,
+                             @ModelAttribute("comment")@Valid CommentDto comment,
+                             BindingResult result,
+                             Model model){
+
+        if(result.hasErrors()){
+            model.addAttribute("comment", comment);
+            return "/post/" + id;
+        }
+
+        commentService.add(comment);
+
+        return "redirect:/post/" + id;
+    }
+
     @GetMapping("/post/{id}/remove")
-    public String removePost(@PathVariable("id") Long id) throws PostNotFoundException {
+    public String removePost(@PathVariable("id") Long id) {
         PostDto post = postsService.getPostById(id);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -51,7 +76,7 @@ public class MyBlogController {
     }
 
     @GetMapping("/post/{id}/edit")
-    public String editPost(@PathVariable("id") Long id, Model model) throws PostNotFoundException {
+    public String editPost(@PathVariable("id") Long id, Model model) {
         PostDto post = postsService.getPostById(id);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -15,7 +15,7 @@
     <form method="post" th:action="@{/login}">
         <div class="card-body">
             <div th:if="${param.error}">
-                <div class="error" th:text="'*Invalid username or password'"></div>
+                <div class="text-danger" th:text="'*Invalid username or password'"></div>
             </div>
             <div th:if="${param.logout}">
                 <div class="success" th:text="'You have been logged out'"></div>
@@ -38,7 +38,7 @@
 
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Log In</button>
-            <a class="mx-2" th:href="@{/registration}" th:text="'Sign In'"></a>
+            <a class="mx-2" th:href="@{/registration}" th:text="'Sign up'"></a>
         </div>
     </form>
 

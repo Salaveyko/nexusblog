@@ -17,7 +17,7 @@
             <div class="card-header">
                 <input id="title" name="title" class="form-control" type="text"
                        th:value="*{title}" placeholder="Enter title here..."/>
-                <p class="error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
+                <p class="text-danger" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
             </div>
 
             <div class="card-body">

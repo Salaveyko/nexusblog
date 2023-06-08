@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
@@ -30,50 +31,11 @@
 <div class="container-fluid mt-5 pt-4 p-5" style="min-height: 100vh;">
     <div class="content" layout:fragment="content">
         <div class="post-container">
-            <button class="btn btn-primary ms-5 shadow rounded"
-                    th:attr="onclick='window.location.href=\'/new-post\''">
-                New post
-            </button>
+            <th:block th:insert="~{post::newPostBtn}"/>
 
-            <div class="card mt-4 shadow mb-5 bg-body-tertiary rounded"
-                 th:each="post, status : ${posts}">
-
-                <div class="card-header">
-
-                    <a class="user-name d-flex ms-4 mt-1 link-underline link-underline-opacity-0 link-dark"
-                       th:href="@{'/profile/' + ${post.username}}">
-
-                        <img class="img-thumbnail rounded-circle border-dark"
-                             th:if="${post.avatarPath != null}"
-                             th:src="@{'/uploads/avatar/' + ${post.avatarPath}}"
-                             alt="Avatar"
-                             style="height: 40px; width: 40px;"/>
-
-                        <h4 class="align-self-center ms-3" th:text="${post.username}"/>
-
-                    </a>
-                </div>
-                <div class="card-header">
-                    <h4 class="card-title ms-3" th:text="${post.title}"/>
-                </div>
-                <div class="card-body">
-                    <p class="card-text" th:text="${post.content}"/>
-                </div>
-                <div class="card-footer text-body-secondary" style="height: 45px;">
-                    <div class="row">
-                        <div class="post-actions col" th:if="${post.username.equals(#authentication.name)}">
-                            <a class="link-underline link-underline-opacity-0 link-secondary"
-                               th:href="@{/post/{id}/remove(id=${post.id})}" th:text="'Remove'"></a>
-                            <a class="link-underline link-underline-opacity-0 link-secondary ms-2"
-                               th:href="@{/post/{id}/edit(id=${post.id})}" th:text="'Edit'"></a>
-                        </div>
-
-                        <div class="text-end col">
-                            <p th:text="${#dates.format(post.updated, 'dd MMMM yyyy')}"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <th:block th:each="post : ${posts}">
+                <th:block th:insert="~{post::post}"/>
+            </th:block>
         </div>
     </div>
 </div>
