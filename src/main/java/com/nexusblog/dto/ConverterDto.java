@@ -2,6 +2,7 @@ package com.nexusblog.dto;
 
 import com.nexusblog.persistence.entity.*;
 
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class ConverterDto {
@@ -36,7 +37,7 @@ public class ConverterDto {
                 post.getUpdated(),
                 post.getUser().getUsername(),
                 post.getUser().getProfile().getAvatarPath(),
-                (post.getComments() != null)
+                (post.getComments() != null && !post.getComments().isEmpty())
                         ? post.getComments().stream().map(ConverterDto::commentToDto).collect(Collectors.toSet())
                         : null);
     }
@@ -76,7 +77,16 @@ public class ConverterDto {
                 comment.getContent(),
                 comment.getCreated(),
                 comment.getPost().getId(),
-                comment.getUser().getUsername());
+                comment.getUser().getUsername(),
+                (comment.getComments() != null && !comment.getComments().isEmpty())
+                        ? comment.getComments().stream()
+                            .map(ConverterDto::commentToDto)
+                            .collect(Collectors.toSet())
+                        : new HashSet<>(),
+                (comment.getParentComment() != null)
+                        ? comment.getParentComment().getId()
+                        : 0L);
+
     }
 
     public static Profile profileFromDto(Profile profile, ProfileDto profileDto) {

@@ -43,6 +43,9 @@ public class CommentServiceImpl implements CommentService {
         if(postOpt.isEmpty()) throw new PostNotFoundException();
         comment.setPost(postOpt.get());
 
+        Optional<Comment> parentComment = commentRepository.findById(commentDto.getParentCommentId());
+        parentComment.ifPresent(comment::setParentComment);
+
         comment.setContent(commentDto.getContent());
         comment.setCreated(new Date());
 
