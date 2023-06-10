@@ -9,6 +9,6 @@ public interface UserService {
     UserDto saveNewUser(UserDto userDto);
     UserDto findByUsername(String username);
     void createVerificationToken(User user, String token);
-    void checkVerificationToken(String token, HttpServletRequest request, HttpServletResponse response);
+    void enableUser(String token, HttpServletRequest request, HttpServletResponse response);
 
 }

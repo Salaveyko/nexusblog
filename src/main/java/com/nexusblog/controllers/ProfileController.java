@@ -52,7 +52,7 @@ public class ProfileController {
 
     @GetMapping("emailConfirm")
     public String confirmEmail(@RequestParam("token") String token){
-        profileService.checkVerificationToken(token);
+        profileService.changeEmail(token);
 
         return "redirect:/profile";
     }

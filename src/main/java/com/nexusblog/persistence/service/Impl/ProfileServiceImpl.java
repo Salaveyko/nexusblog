@@ -36,7 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public ProfileDto get(String username) throws ProfileNotFoundException {
+    public ProfileDto get(String username) {
         Optional<Profile> profileOpt = profileRepository.getByUser_Username(username);
         if (profileOpt.isEmpty()) {
             throw new ProfileNotFoundException("Profile don`t found");
@@ -48,7 +48,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public ProfileDto update(ProfileDto profileDto, MultipartFile file)
-            throws ProfileNotFoundException, IOException {
+            throws IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Profile> profileOpt = profileRepository.getByUser_Username(username);
 
@@ -85,7 +85,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void checkVerificationToken(String token) {
+    public void changeEmail(String token) {
         VerificationToken verToken = tokenService.verify(token);
 
         Profile profile  = verToken.getUser().getProfile();

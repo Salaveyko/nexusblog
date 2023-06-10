@@ -69,7 +69,7 @@ public class AuthController {
                                       HttpServletRequest request,
                                       HttpServletResponse response) {
 
-        userService.checkVerificationToken(token, request, response);
+        userService.enableUser(token, request, response);
 
         return "redirect:/";
     }

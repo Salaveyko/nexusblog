@@ -1,4 +1,4 @@
-package com.nexusblog.persistence.dao.service.Impl;
+package com.nexusblog.persistence.service.Impl;
 
 import com.nexusblog.persistence.repository.UserRepository;
 import com.nexusblog.persistence.entity.Post;
@@ -35,13 +35,12 @@ class UserDetailsServiceImplTest {
         expUser.addRole(new Role(TbConstants.Roles.USER));
         expUser.addRole(new Role(TbConstants.Roles.ADMIN));
         expUser.addPost(new Post("title1","content1",new Date(), new Date()));
-        expUser.addPost(new Post("title2","content2",new Date(), new Date()));
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(expUser));
 
         UserDetails actUser = userDetailsService.loadUserByUsername(username);
 
-        verify(userRepository, times(1)).findByUsername(username);
+        verify(userRepository, times(1)).findByUsername(anyString());
         assertEquals(expUser, actUser);
     }
 }

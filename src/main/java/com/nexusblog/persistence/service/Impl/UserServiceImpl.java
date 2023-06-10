@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void checkVerificationToken(String token, HttpServletRequest request,
-                                       HttpServletResponse response) {
+    public void enableUser(String token, HttpServletRequest request,
+                           HttpServletResponse response) {
         VerificationToken verToken = tokenService.verify(token);
 
         User user = verToken.getUser();

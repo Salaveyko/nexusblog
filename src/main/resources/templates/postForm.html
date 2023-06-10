@@ -9,8 +9,8 @@
 
 <div class="post-container justify-content-center" layout:fragment="content">
     <div class="card mt-4 shadow mb-5 bg-body-tertiary rounded">
-        <div class="card-header">
-            <h3 class="ms-4" th:text="Post"></h3>
+        <div class="card-header bg-dark">
+            <h3 class="ms-4 text-light" th:text="Post"></h3>
         </div>
         <form th:action="@{'/'}" class="post-form" method="post" th:object="${post}">
 

@@ -1,13 +1,13 @@
-package com.nexusblog.persistence.dao.service.Impl;
+package com.nexusblog.persistence.service.Impl;
 
 import com.nexusblog.dto.ConverterDto;
 import com.nexusblog.dto.PostDto;
 import com.nexusblog.exceptions.PostNotFoundException;
-import com.nexusblog.persistence.repository.PostsRepository;
 import com.nexusblog.persistence.entity.Post;
 import com.nexusblog.persistence.entity.User;
-import com.nexusblog.persistence.service.Impl.PostsServiceImpl;
+import com.nexusblog.persistence.repository.PostsRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -47,33 +48,54 @@ class PostsServiceImplTest {
         );
     }
 
-    @Test
-    void getAll_returnCorrectPostsSet() {
-        Iterable<Post> returned = Collections.singleton(post);
-        when(postsRepository.findAll()).thenReturn(returned);
+    @Nested
+    class PostGettersTests {
+        @Test
+        void getAll_returnCorrectPostsSet() {
+            Iterable<Post> returned = Collections.singleton(post);
+            when(postsRepository.findAll()).thenReturn(returned);
 
-        Set<PostDto> expected = Collections.singleton(ConverterDto.postToDto(post));
-        Set<PostDto> actual = postsService.getAll();
+            Set<PostDto> expected = Collections.singleton(ConverterDto.postToDto(post));
+            Set<PostDto> actual = postsService.getAll();
 
-        verify(postsRepository, times(1)).findAll();
-        assertEquals(expected, actual);
-    }
+            verify(postsRepository, times(1)).findAll();
+            assertEquals(expected, actual);
+        }
 
-    @Test
-    void getMyPosts_returnedCorrectUserPostsSet() {
-        Iterable<Post> returned = Collections.singleton(post);
+        @Test
+        void getMyPosts_returnedCorrectUserPostsSet() {
+            Iterable<Post> returned = Collections.singleton(post);
 
-        when(postsRepository.findAllByUser_Username(any(String.class))).thenReturn(returned);
+            when(postsRepository.findAllByUser_Username(any(String.class))).thenReturn(returned);
 
-        Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn(post.getUser().getUsername());
-        SecurityContextHolder.getContext().setAuthentication(auth);
+            Authentication auth = mock(Authentication.class);
+            when(auth.getName()).thenReturn(post.getUser().getUsername());
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Set<PostDto> expected = Collections.singleton(ConverterDto.postToDto(post));
-        Set<PostDto> actual = postsService.getMyPosts();
+            Set<PostDto> expected = Collections.singleton(ConverterDto.postToDto(post));
+            Set<PostDto> actual = postsService.getMyPosts();
 
-        verify(postsRepository, times(1)).findAllByUser_Username(any(String.class));
-        assertEquals(expected, actual);
+            verify(postsRepository, times(1)).findAllByUser_Username(any(String.class));
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        void getPostById_return() {
+            PostDto expected = ConverterDto.postToDto(post);
+
+            when(postsRepository.findById(1L)).thenReturn(Optional.of(post));
+
+            PostDto actual = postsService.getPostById(1L);
+
+            verify(postsRepository, times(1)).findById(anyLong());
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        void getPostById_throwPostNotFoundException() {
+            when(postsRepository.findById(anyLong())).thenReturn(Optional.empty());
+            assertThrows(PostNotFoundException.class, () -> postsService.getPostById(1L));
+        }
     }
 
     @Test
@@ -101,17 +123,5 @@ class PostsServiceImplTest {
 
         postsService.removeById(id);
         verify(postsRepository, times(1)).deleteById(id);
-    }
-
-    @Test
-    void getPostById_return() {
-        PostDto expected = ConverterDto.postToDto(post);
-
-        when(postsRepository.findById(any(Long.class))).thenReturn(Optional.of(post));
-
-        PostDto actual = postsService.getPostById(1L);
-
-        verify(postsRepository, times(1)).findById(any(Long.class));
-        assertEquals(expected, actual);
     }
 }
