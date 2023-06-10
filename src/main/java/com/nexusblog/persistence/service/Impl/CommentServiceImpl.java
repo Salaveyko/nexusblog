@@ -2,6 +2,7 @@ package com.nexusblog.persistence.service.Impl;
 
 import com.nexusblog.dto.CommentDto;
 import com.nexusblog.dto.ConverterDto;
+import com.nexusblog.exceptions.CommentNotFoundException;
 import com.nexusblog.exceptions.PostNotFoundException;
 import com.nexusblog.persistence.entity.Comment;
 import com.nexusblog.persistence.entity.Post;
@@ -53,8 +54,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(CommentDto commentDto) {
-        commentRepository.deleteById(commentDto.getId());
+    public void deleteById(Long id) {
+        commentRepository.deleteById(id);
+    }
+
+    @Override
+    public CommentDto getById(Long commentId) {
+        Optional<Comment> commOpt = commentRepository.findById(commentId);
+        if(commOpt.isEmpty()) throw new CommentNotFoundException();
+        return ConverterDto.commentToDto(commOpt.get());
     }
 
 }

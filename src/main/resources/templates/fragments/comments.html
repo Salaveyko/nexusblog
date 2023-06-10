@@ -1,0 +1,67 @@
+<div th:fragment="comments">
+    <div class="border-top px-5 pt-5">
+        <th:block th:insert="~{fragments/comment-form::commentForm}"></th:block>
+    </div>
+
+    <div class="px-5" th:if="${post.comments != null && !post.comments.isEmpty()}">
+
+        <th:block th:each="comment : ${post.comments}">
+            <th:block th:if="${comment.parentCommentId == 0}">
+                <div class="ms-5 mt-3" th:object="${comment}"
+                     th:fragment="comment">
+
+                    <div class="card shadow bg-body-tertiary rounded">
+
+                        <div class="card-header bg-dark">
+                            <a class="user-name d-flex bg-dark rounded link-light link-offset-2
+                                      link-underline-opacity-0 link-underline-opacity-100-hover"
+                               th:href="@{'/profile/' + *{username}}">
+
+                                <img class="img-thumbnail rounded-circle border-dark"
+                                     th:if="${post.avatarPath != null}"
+                                     th:src="@{'/uploads/avatar/' + ${post.avatarPath}}"
+                                     alt="Avatar"
+                                     style="height: 40px; width: 40px;"/>
+
+                                <h4 class="align-self-center ms-3"
+                                    th:text="*{username}"></h4>
+                            </a>
+                        </div>
+
+                        <div class=" card-body">
+                            <p class="card-text p-2" th:text="*{content}"></p>
+                        </div>
+
+                        <div class="card-footer text-body-secondary" style="height: 40px">
+                            <div class="row">
+
+                                <a class="link-underline link-underline-opacity-0 link-secondary col-md-1"
+                                   data-toggle="collapse" role="button"
+                                   aria-expanded="false" th:aria-controls="'commentForm-' + *{id}"
+                                   th:href="@{'#commentForm-' + *{id}}" th:text="reply"></a>
+
+                                <a class="link-underline link-underline-opacity-0 link-secondary col"
+                                   th:if="*{username.equals(#authentication.name)}"
+                                   th:href="@{/post/{id}/comment/{comm_id}/remove(id=${post.id}, comm_id=*{id})}"
+                                   th:text="'Remove'"></a>
+
+                                <p class="text-end col"
+                                   th:text="${#dates.format(comment.created, 'HH:mm, dd MMMM yyyy')}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse" th:id="'commentForm-' + *{id}">
+                        <th:block th:insert="~{fragments/comment-form::commentForm}"
+                                  th:with="parentComment=*{id}"></th:block>
+                    </div>
+
+                    <th:block th:if="*{!comments.isEmpty()}">
+                        <th:block th:insert="~{fragments/comments::comment}" th:each="comment : *{comments}"></th:block>
+                    </th:block>
+
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+</div>

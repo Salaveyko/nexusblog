@@ -1,0 +1,14 @@
+<form th:action="@{/post/{id}(id=${post.id})}"
+      th:method="post"
+      th:fragment="commentForm">
+
+  <div class="p-2 shadow mb-5 bg-body-tertiary rounded border">
+                <textarea id="content" name="content" class="form-control overflow-hidden"
+                          placeholder="New comment"></textarea>
+    <input type="hidden" name="username" th:value="${#authentication.name}">
+    <input type="hidden" name="postId" th:value="${post.id}">
+    <input type="hidden" name="parentCommentId" th:value="${parentComment}">
+
+    <button type="submit" class="btn btn-primary mt-2 ms-3">Comment</button>
+  </div>
+</form>

@@ -89,6 +89,20 @@ public class MyBlogController {
 
         return "postForm";
     }
+    @GetMapping("/post/{id}/comment/{com_id}/remove")
+    public String removeComment(@PathVariable("com_id") Long commentId,
+                                @PathVariable("id") Long id){
+        CommentDto comment = commentService.getById(commentId);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(!comment.getUsername().equals(username)){
+            throw new AccessDeniedException("You do not have permission to remove the comment");
+        }
+
+        commentService.deleteById(commentId);
+
+        return "redirect:/post/" + id;
+    }
 
     @GetMapping("/new-post")
     public String addPost(Model model) {

@@ -30,10 +30,10 @@
 <div class="container-fluid mt-5 pt-4 p-5" style="min-height: 100vh;">
     <div class="content" layout:fragment="content">
         <div class="post-container">
-            <th:block th:insert="~{post::newPostBtn}"/>
+            <th:block th:insert="~{fragments/post::newPostBtn}"/>
 
             <th:block th:each="post : ${posts}">
-                <th:block th:insert="~{post::post}"/>
+                <th:block th:insert="~{fragments/post::post}"/>
             </th:block>
         </div>
     </div>

@@ -1,0 +1,46 @@
+<button class="btn btn-primary ms-5 shadow rounded"
+        th:attr="onclick='window.location.href=\'/new-post\''"
+        th:fragment="newPostBtn"
+        th:text="'New post'"></button>
+
+<div class="card mt-4 shadow mb-5 bg-body-tertiary rounded"
+     th:fragment="post" th:object="${post}">
+
+    <div class="card-header bg-dark">
+
+        <a class="user-name d-flex ms-4 mt-1 link-light link-offset-2 link-underline-opacity-0
+                  link-underline-opacity-100-hover"
+           th:href="@{'/profile/' + *{username}}">
+
+            <img class="img-thumbnail rounded-circle border-dark"
+                 th:if="*{avatarPath != null}"
+                 th:src="@{'/uploads/avatar/' + *{avatarPath}}"
+                 alt="Avatar"
+                 style="height: 40px; width: 40px;"/>
+
+            <h4 class="align-self-center ms-3"
+                th:text="*{username}"></h4>
+        </a>
+    </div>
+
+    <div class="card-body">
+        <a class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover "
+           th:href="@{/post/{id}(id=*{id})}">
+            <h4 class="card-title ms-3 pb-2 border-bottom" th:text="*{title}"></h4>
+        </a>
+        <p class="card-text p-2" th:text="*{content}"></p>
+    </div>
+    <div class="card-footer text-body-secondary" style="height: 45px;">
+        <div class="row">
+            <div class="post-actions col" th:if="*{username.equals(#authentication.name)}">
+                <a class="link-underline link-underline-opacity-0 link-secondary"
+                   th:href="@{/post/{id}/remove(id=*{id})}" th:text="'Remove'"></a>
+                <a class="link-underline link-underline-opacity-0 link-secondary ms-2"
+                   th:href="@{/post/{id}/edit(id=*{id})}" th:text="'Edit'"></a>
+            </div>
+            <div class="text-end col">
+                <p th:text="${#dates.format(post.updated, 'HH:mm, dd MMMM yyyy')}"></p>
+            </div>
+        </div>
+    </div>
+</div>
